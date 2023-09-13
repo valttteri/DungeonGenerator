@@ -1,6 +1,6 @@
 #right now I'm trying to create a successful triangulation with bowyer-watson algorithm with my program
 #at the moment the program plots a single triangle and a circle around it
-
+import itertools
 import pygame
 from random import *
 from math import *
@@ -25,29 +25,50 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
 class Triangle():
+    new_id = itertools.count()
     def __init__(self, node_a: tuple, node_b: tuple, node_c: tuple):
         self.node_a = node_a
         self.node_b = node_b
         self.node_c = node_c
+        self.id = next(self.new_id)
         self.circumcenter = findCircumcenter([self.node_a, self.node_b, self.node_c])
         self.circum_circles_radius = distanceBetweenPoints(self.circumcenter, self.node_a)
 
         self.edges = [[self.node_a, self.node_b],
                       [self.node_b, self.node_c],
                       [self.node_c, self.node_a]]
+    
+    def __str__(self):
+        return f"Triangle number {self.id}"
+    
+    def __repr__(self):
+        return f'Triangle with edges {self.edges}'
 
+    def __eq__(self, other): 
+        if not isinstance(other, Triangle):
+            #don't attempt to compare against unrelated types
+            return 'triangles only'
+
+        return self.id == other.id
+    
+    def showID(self):
+        return self.id
+
+    def edges(self):
+        return self.edges
+
+    def circumCenter(self):
+        return self.circumcenter
+    
+    def ccRadius(self):
+        return self.circum_circles_radius
+    
     def plot(self):
         for e in self.edges:
             pygame.draw.line(display, GREEN, e[0], e[1])
 
     def circumCircle(self):
         pygame.draw.circle(display, RED, self.circumcenter, radius=self.circum_circles_radius, width=2)
-
-#def plotCircumcircle(coordinates: list):
-#    centerpoint = findCircumcenter(coordinates)
-#    radius = distanceBetweenPoints(centerpoint, coordinates[0])
-#
-#    pygame.draw.circle(display, RED, centerpoint, radius=radius, width=2)
 
 #plot a single triangle
 def plotATriangle(coordinates: list):
@@ -120,9 +141,98 @@ def generateCoordinates(count: int):
     
     return coordinates
 
-def bowyerWatson(coordinates: list):
+def areEdgesEqual(edge_1: list, edge_2: list):
+    return edge_1[0] == edge_2[0] and edge_1[1] == edge_2[1] or edge_1[0] == edge_2[1] and edge_1[1] == edge_2[0]
+
+def bowyerWatson(nodelist: list):
     triangulation = []
 
+    #algorithm part1
+    super_triangle = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2])
+    super_triangle_nodes = []
+
+    super_triangle_edges = super_triangle.edges
+    for edge in super_triangle_edges:
+        super_triangle_nodes.append(edge[0])
+    print(super_triangle_nodes)
+    #tri2 = Triangle((1, 4), (10, 10), (100, 100))
+    #tri3 = Triangle((1, 4), (10, 10), (100, 100))
+    #print(tri2.edges)
+    #print(areEdgesEqual(tri2.edges[1], tri2.edges[1]))
+
+    triangulation.append(super_triangle)
+    #triangulation.append(tri2)
+    #triangulation.append(tri3)
+    #print(triangulation)
+    #print(triangulation[1] == tri2)
+
+    for node in nodelist:
+
+        badTriangles = []
+
+        for triangle in triangulation:
+            circumcenter = triangle.circumCenter()
+            circum_circles_radius = triangle.ccRadius()
+
+            #algorithm part 2: distance between the triangles circumcenter and the node
+            distance = distanceBetweenPoints(node, circumcenter)
+            if distance < circum_circles_radius:
+                badTriangles.append(triangle)
+                #print(f'distance between {circumcenter} and {node} is {distance} which is less than {circum_circles_radius}')
+            
+        polygon = []
+        #algorithm part 3: define the polygonal hole
+        for triangle in badTriangles:
+            print(f'part 3 for {triangle}')
+            edges = triangle.edges
+            for edge in edges:
+                print(f'looking at edge {edge}')
+                found = False
+                
+                for otherTriangle in badTriangles:
+                    print(f'comparing edge {edge} to {otherTriangle}')
+                    other_triangles_edges = otherTriangle.edges
+                    if otherTriangle == triangle:
+                        continue
+
+                    for other_edge in other_triangles_edges:
+                        if areEdgesEqual(other_edge, edge):
+                            print(f'similar edges {edge} and {other_edge}')
+                            found = True
+                if not found:
+                    print(f'adding edge {edge} to polygon')
+                    polygon.append(edge)
+        print(f'polygon: {polygon}')
+
+        for triangle in triangulation:
+            if triangle in badTriangles:
+                #print(triangulation)
+                print('this triangle is bad')
+                triangulation.remove(triangle)
+                print(f'triangulation after deletion: {triangulation}')
+        
+        for edge in polygon:
+            newTriangle = Triangle(edge[0], edge[1], node)
+            print(f'new triangle is {newTriangle}')
+            triangulation.append(newTriangle)
+    
+    for triangle in triangulation:
+        edges = triangle.edges
+        found = False
+        for edge in edges:
+            if found:
+                continue
+            if edge[0] in super_triangle_nodes or edge[1] in super_triangle_nodes:
+                triangulation.remove(triangle)
+                found = True
+                
+    return triangulation
+
+
+
+bowyerWatson(generateCoordinates(3))
+
+'''
 while True:
     for tapahtuma in pygame.event.get():
         if tapahtuma.type == pygame.QUIT:
@@ -152,3 +262,4 @@ while True:
 
     pygame.display.flip()
     pygame.time.wait(500)
+'''
