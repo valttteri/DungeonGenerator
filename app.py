@@ -7,16 +7,47 @@ from math import *
 
 pygame.init()
 
-displayWidth = 800
+displayWidth = 1000
 displayHeight = 600
 display = pygame.display.set_mode((displayWidth, displayHeight))
 pygame.display.set_caption('Welcome to the Dungeon')
 
 counter = 3
+x_min = 300
+x_max = displayWidth-300
+y_min = 200
+y_max = displayHeight-200
+displayCenter = (displayWidth/2, displayHeight/2)
+super_coordinates = [(150, -100), (950, 300), (150, 700)]
 
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+
+class Triangle():
+    def __init__(self, node_a: tuple, node_b: tuple, node_c: tuple):
+        self.node_a = node_a
+        self.node_b = node_b
+        self.node_c = node_c
+        self.circumcenter = findCircumcenter([self.node_a, self.node_b, self.node_c])
+        self.circum_circles_radius = distanceBetweenPoints(self.circumcenter, self.node_a)
+
+        self.edges = [[self.node_a, self.node_b],
+                      [self.node_b, self.node_c],
+                      [self.node_c, self.node_a]]
+
+    def plot(self):
+        for e in self.edges:
+            pygame.draw.line(display, GREEN, e[0], e[1])
+
+    def circumCircle(self):
+        pygame.draw.circle(display, RED, self.circumcenter, radius=self.circum_circles_radius, width=2)
+
+#def plotCircumcircle(coordinates: list):
+#    centerpoint = findCircumcenter(coordinates)
+#    radius = distanceBetweenPoints(centerpoint, coordinates[0])
+#
+#    pygame.draw.circle(display, RED, centerpoint, radius=radius, width=2)
 
 #plot a single triangle
 def plotATriangle(coordinates: list):
@@ -75,18 +106,49 @@ def distanceBetweenPoints(a: tuple, b: tuple):
     distance = sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
     return distance
 
+#generate coordinates in a way to avoid duplicates
+def generateCoordinates(count: int):
+    coordinates = []
+                
+    while len(coordinates) < count:
+        x = randint(x_min, x_max)
+        y = randint(y_min, y_max)
+        candidate = (x, y)
+
+        if candidate not in coordinates:
+            coordinates.append(candidate)
+    
+    return coordinates
+
+def bowyerWatson(coordinates: list):
+    triangulation = []
+
 while True:
     for tapahtuma in pygame.event.get():
         if tapahtuma.type == pygame.QUIT:
             exit()
 
     display.fill((0, 0, 0))
-    #3 sets of coordinates for now
-    coordinates = [((randint(100, displayWidth-100), (randint(100, displayHeight-100)))) for i in range(counter)]
-    
-    plotATriangle(coordinates)
-    #plotCenterPoints(coordinates)
-    plotCircumcircle(coordinates)
+
+    coordinates = generateCoordinates(counter)
+
+    for c in coordinates:
+        pygame.draw.circle(display, BLUE, c, 2)
+
+    t = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2])
+    t.plot()
+    t.circumCircle()
+
+    #area where points can be plotted
+    pygame.draw.line(display, RED, (x_min, y_min), (x_max, y_min))
+    pygame.draw.line(display, RED, (x_min, y_min), (x_min, y_max))
+    pygame.draw.line(display, RED, (x_min, y_max), (x_max, y_max))
+    pygame.draw.line(display, RED, (x_max, y_min), (x_max, y_max))
+
+    #pygame.draw.circle(display, BLUE, displayCenter, 2)
+
+    #plotATriangle(coordinates)
+    #plotCircumcircle(coordinates)
 
     pygame.display.flip()
-    pygame.time.wait(1000)
+    pygame.time.wait(500)
