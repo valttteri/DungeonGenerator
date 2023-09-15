@@ -2,8 +2,11 @@
 At the moment this program visualises Delaunay triangulation with Bowyer-Watson algorithm.
 The algorithm doesn't work if the the nodes end up forming an approximately straight line.
 In this case it returns an empty list. I don't know if there is a way to fix this problem.
-With larger inputs (about 10+ nodes) the algorithm fortunately works 99% of the time.
+With larger inputs (about 10+ nodes) the algorithm appears to work 99% of the time.
 The variable "counter" equals to the number of nodes given to the algorithm.
+
+In order to run the tests, comment out the three lines under the variable displayHeight
+and the while-loop on the bottom of the file.
 '''
 
 import itertools
@@ -14,12 +17,13 @@ from math import *
 displayWidth = 800
 displayHeight = 400
 
-#pygame.init()
-#display = pygame.display.set_mode((displayWidth, displayHeight))
-#pygame.display.set_caption('Welcome to the Dungeon')
+#comment out the following three lines for testing
+pygame.init()
+display = pygame.display.set_mode((displayWidth, displayHeight))
+pygame.display.set_caption('Welcome to the Dungeon')
 
 #counter equals to the number of nodes given to the algorithm
-counter = 3
+counter = 5
 x_min = 100
 x_max = displayWidth-100
 y_min = 50
@@ -194,7 +198,7 @@ def bowyerWatson(nodelist: list):
     return triangulation
 
 #visualising with pygame
-'''
+#comment out the entire loop for testing
 while True:
     for tapahtuma in pygame.event.get():
         if tapahtuma.type == pygame.QUIT:
@@ -223,4 +227,3 @@ while True:
     #pygame.draw.line(display, RED, (x_min, y_min), (x_min, y_max))
     #pygame.draw.line(display, RED, (x_min, y_max), (x_max, y_max))
     #pygame.draw.line(display, RED, (x_max, y_min), (x_max, y_max))
-'''
