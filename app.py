@@ -18,9 +18,9 @@ displayWidth = 800
 displayHeight = 400
 
 #comment out the following three lines for testing
-pygame.init()
-display = pygame.display.set_mode((displayWidth, displayHeight))
-pygame.display.set_caption('Welcome to the Dungeon')
+#pygame.init()
+#display = pygame.display.set_mode((displayWidth, displayHeight))
+#pygame.display.set_caption('Welcome to the Dungeon')
 
 #counter equals to the number of nodes given to the algorithm
 counter = 5
@@ -199,6 +199,7 @@ def bowyerWatson(nodelist: list):
 
 #visualising with pygame
 #comment out the entire loop for testing
+'''
 while True:
     for tapahtuma in pygame.event.get():
         if tapahtuma.type == pygame.QUIT:
@@ -227,3 +228,4 @@ while True:
     #pygame.draw.line(display, RED, (x_min, y_min), (x_min, y_max))
     #pygame.draw.line(display, RED, (x_min, y_max), (x_max, y_max))
     #pygame.draw.line(display, RED, (x_max, y_min), (x_max, y_max))
+'''
