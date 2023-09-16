@@ -3,9 +3,9 @@ At the moment this program visualises Delaunay triangulation with Bowyer-Watson 
 The algorithm doesn't work if the the nodes end up forming an approximately straight line.
 In this case it returns an empty list. I don't know if there is a way to fix this problem.
 With larger inputs (about 10+ nodes) the algorithm appears to work 99% of the time.
-The variable "counter" equals to the number of nodes given to the algorithm.
+The variable "node_count" equals to the number of nodes given to the algorithm.
 
-In order to run the tests, comment out the three lines under the variable displayHeight
+In order to run the tests, comment out the three lines under the variable display_height
 and the while-loop on the bottom of the file.
 '''
 
@@ -14,27 +14,27 @@ import pygame
 from random import *
 from math import *
 
-displayWidth = 800
-displayHeight = 400
+display_width = 800
+display_height = 400
 
 #comment out the following three lines for testing
-#pygame.init()
-#display = pygame.display.set_mode((displayWidth, displayHeight))
-#pygame.display.set_caption('Welcome to the Dungeon')
+pygame.init()
+display = pygame.display.set_mode((display_width, display_height))
+pygame.display.set_caption('Welcome to the Dungeon')
 
-#counter equals to the number of nodes given to the algorithm
-counter = 5
+#node_count equals to the number of nodes given to the algorithm
+node_count = 5
 x_min = 100
-x_max = displayWidth-100
+x_max = display_width-100
 y_min = 50
-y_max = displayHeight-50
-displayCenter = (displayWidth/2, displayHeight/2)
+y_max = display_height-50
+display_center = (display_width/2, display_height/2)
 
 '''
 Hard coded coordinates for the super triangle. I might add a function for randomly generating
 a super triangle later.
 '''
-super_coordinates = [(10, -400), (1500, 300), (10, 1200)]
+super_coordinates = [(-10, -400), (1500, 300), (-10, 1200)]
 
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
@@ -91,7 +91,10 @@ class Triangle():
     def circumCircle(self):
         pygame.draw.circle(display, RED, self.circumcenter, radius=self.circum_circles_radius, width=2)
 
-#find cartesian coordinates of the circumcenter of a triangle
+'''
+Find cartesian coordinates of a triangle's circumcenter.
+I found the formula from this website: https://en.wikipedia.org/wiki/Circumcircle
+'''
 def findCircumcenter(coordinates: list):
     ax = coordinates[0][0]
     ay = coordinates[0][1]
@@ -105,19 +108,19 @@ def findCircumcenter(coordinates: list):
     uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d
     return ux, uy
 
-#draw a circle around a triangle
+#Plot a triangle's circumcircle
 def plotCircumcircle(coordinates: list):
     centerpoint = findCircumcenter(coordinates)
     radius = distanceBetweenPoints(centerpoint, coordinates[0])
 
     pygame.draw.circle(display, RED, centerpoint, radius=radius, width=2)
 
-#calculate the distance between two points
+#Calculate the distance between two points
 def distanceBetweenPoints(a: tuple, b: tuple):
     distance = sqrt((b[0]-a[0])**2 + (b[1]-a[1])**2)
     return distance
 
-#generate coordinates in a way to avoid duplicates
+#Generate coordinates in a way to avoid duplicates
 def generateCoordinates(count: int):
     coordinates = []
                 
@@ -131,25 +134,45 @@ def generateCoordinates(count: int):
     
     return coordinates
 
+#Check if two separate triangles have a common edge
 def areEdgesEqual(edge_1: list, edge_2: list):
     return (edge_1[0] == edge_2[0] and edge_1[1] == edge_2[1]) or (edge_1[0] == edge_2[1] and edge_1[1] == edge_2[0])
 
-#generate Delaunay triangulation
+'''
+Bowyer-Watson algorithm for generating a Delaunay triangulation. Steps:
+
+1. Create an empty list for the triangulation. Create a 'super triangle' i.e. a triangle which is large enough to contain every single node inside it.
+Add the super triangle into the triangulation.
+
+2. Start the process of adding each node into the triangulation
+
+3. Check if the node is inside one or more circumcircles. All triangles which have a node inside their circumcircle are now 'bad' triangles.
+
+4. Go through each triangle in bad_triangles. If a triangle has an edge which is not shared with another triangle, add it to the list named "polygon".
+
+5. Remove each bad triangle from the triangulation.
+
+6. Create a new triangle between the node and every edge in the list polygon.
+
+7. Check if there are triangles in the triangulation that share a node or an edge with the original super triangle. If so, remove these triangles.
+'''
 def bowyerWatson(nodelist: list):
+    #Step 1.
     triangulation = []
     super_triangle = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2])
     super_triangle_nodes = []
 
     super_triangle_edges = super_triangle.showEdges()
-    for edge in super_triangle_edges:
-        super_triangle_nodes.append(edge[0])
+    super_triangle_nodes = super_triangle.showNodes()
 
     triangulation.append(super_triangle)
 
+    #Step 2.
     for node in nodelist:
 
         bad_triangles = []
 
+        #Step 3.
         for triangle in triangulation:
             circumcenter = triangle.circumCenter()
             circum_circles_radius = triangle.ccRadius()
@@ -160,6 +183,7 @@ def bowyerWatson(nodelist: list):
                         
         polygon = []
 
+        #Step 4.
         for bad_triangle in bad_triangles:
             edges = bad_triangle.showEdges()
             for edge in edges:
@@ -175,13 +199,16 @@ def bowyerWatson(nodelist: list):
                 if not found:
                     polygon.append(edge)
 
+        #Step 5.
         for bad_triangle in bad_triangles:
             triangulation.remove(bad_triangle)
         
+        #Step 6.
         for edge in polygon:
             newTriangle = Triangle(edge[0], edge[1], node)
             triangulation.append(newTriangle)
     
+    #Step 7.
     remove_triangles = []
     for triangle in triangulation:
         nodes = triangle.showNodes()
@@ -199,7 +226,6 @@ def bowyerWatson(nodelist: list):
 
 #visualising with pygame
 #comment out the entire loop for testing
-'''
 while True:
     for tapahtuma in pygame.event.get():
         if tapahtuma.type == pygame.QUIT:
@@ -207,7 +233,7 @@ while True:
 
     display.fill((0, 0, 0))
 
-    coordinates = generateCoordinates(counter)
+    coordinates = generateCoordinates(node_count)
 
     for c in coordinates:
         pygame.draw.circle(display, BLUE, c, 4)
@@ -222,10 +248,3 @@ while True:
 
     pygame.display.flip()
     pygame.time.wait(200)
-
-    #these lines mark the area where nodes can be placed
-    #pygame.draw.line(display, RED, (x_min, y_min), (x_max, y_min))
-    #pygame.draw.line(display, RED, (x_min, y_min), (x_min, y_max))
-    #pygame.draw.line(display, RED, (x_min, y_max), (x_max, y_max))
-    #pygame.draw.line(display, RED, (x_max, y_min), (x_max, y_max))
-'''

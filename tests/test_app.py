@@ -40,6 +40,16 @@ class TestApp(unittest.TestCase):
         self.assertEqual(triangle.showEdges()[1][1], (7, 2))
         self.assertEqual(triangle.showEdges()[2][0], (7, 2))
         self.assertEqual(triangle.showEdges()[2][1], (1, 5))
+    
+    def test_bowyerWatson(self):
+        triangulation = app.bowyerWatson([(100, 100), (300, 200), (150, 300)])
+        self.assertEqual(len(triangulation), 1)
+        triangulation = app.bowyerWatson([(100, 100), (300, 200), (150, 300), (250, 350)])
+        self.assertEqual(len(triangulation), 2)
+        triangulation = app.bowyerWatson([(100, 100), (300, 200), (150, 300), (250, 350), (400, 125)])
+        self.assertEqual(len(triangulation), 4)
+        triangulation = app.bowyerWatson([(100, 100), (300, 200), (150, 300), (250, 350), (400, 125), (300, 400)])
+        self.assertEqual(len(triangulation), 6)
 
 if __name__ == '__main__':
     unittest.main(testRunner=xmlrunner.XMLTestRunner(output='results'),
