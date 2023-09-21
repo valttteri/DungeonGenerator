@@ -1,5 +1,6 @@
 from math import *
 from heapq import *
+from random import *
 
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
@@ -78,6 +79,24 @@ def findMinimumEdge(edges: list):
     
     return min_edge
 
+#Return some of the removed edges in order to create alternate routes
+def findRemovedEdges(mst: list, edges: list):
+    removed = []
+
+    for edge in edges:
+        lottery_number = randint(0, 100)
+        valid = True
+        if edge in mst:
+            valid = False
+        if (edge[1], edge[0]) in mst:
+            valid = False
+        if lottery_number < 87:
+            valid = False
+        if valid:
+            removed.append(edge)
+    
+    return removed
+
 '''
 Prim's algorithm for creating a minimum spanning tree based on a triangulation. I had to improvise a little in order to get
 this to work and therefore the code is probably not very readable.
@@ -128,4 +147,6 @@ def primsAlgorithm(triangulation: dict):
     return minimum_spanning_tree
 
 if __name__ == '__main__':
-    print(primsAlgorithm(tuples))
+    mst = primsAlgorithm(tuples)
+    print(mst)
+    print(findRemovedEdges(mst, tuples))
