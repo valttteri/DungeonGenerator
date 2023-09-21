@@ -13,7 +13,7 @@ import itertools
 import pygame
 from random import *
 from math import *
-from prim import primsAlgorithm, findNearestNode, plotMST
+from prim import primsAlgorithm
 
 display_width = 800
 display_height = 400
@@ -24,12 +24,14 @@ display = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Welcome to the Dungeon')
 
 #node_count equals to the number of nodes given to the algorithm
-node_count = 20
+node_count = 10
 x_min = 100
 x_max = display_width-100
 y_min = 50
 y_max = display_height-50
 display_center = (display_width/2, display_height/2)
+
+font = pygame.font.SysFont("Arial", 16)
 
 '''
 Hard coded coordinates for the super triangle. I might add a function for randomly generating
@@ -133,12 +135,14 @@ def generateCoordinates(count: int):
         if candidate not in coordinates:
             coordinates.append(candidate)
     
-    g=[(448, 339),
-        (226, 167),
-        (269, 292),
-        (100, 341),
-        (105, 243),
-        (690, 269)]
+    g=[
+        (674, 166),
+        (388, 324),
+        (549, 268),
+        (361, 223),
+        (491, 173),
+        (658, 185)
+    ]
     
     return coordinates
 
@@ -232,8 +236,14 @@ def bowyerWatson(nodelist: list):
 
     return triangulation
 
+def plotMST(coordinates: list):
+
+    for c in coordinates:
+        pygame.draw.line(display, GREEN, c[0], c[1])
+
 #visualising with pygame
 #comment out the entire loop for testing
+
 while True:
     for tapahtuma in pygame.event.get():
         if tapahtuma.type == pygame.QUIT:
@@ -245,29 +255,27 @@ while True:
 
     for c in coordinates:
         pygame.draw.circle(display, BLUE, c, 4)
+        #text = font.render(f'{c}', True, GREEN)
+        #display.blit(text, c)
 
     t = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2])
     t.plot()
 
     triangulation = bowyerWatson(coordinates)
     minimum_spanning_tree = primsAlgorithm(triangulation)
-    pygame.draw.circle(display, RED, minimum_spanning_tree[-1], 5)
 
 
     for triangle in triangulation:
         triangle.plot()
 
     pygame.display.flip()
-    pygame.time.wait(2000)
+    pygame.time.wait(1000)
 
     display.fill((0, 0, 0))
     for c in coordinates:
         pygame.draw.circle(display, BLUE, c, 4)
-    pygame.draw.circle(display, RED, minimum_spanning_tree[-1], 5)
 
-    plotMST(minimum_spanning_tree, display)
-
-    #print(findNearestNode(mst, mst[-1]))
+    plotMST(minimum_spanning_tree)
     
     pygame.display.flip()
-    pygame.time.wait(4000)
+    pygame.time.wait(1000)
