@@ -13,6 +13,7 @@ import itertools
 import pygame
 from random import *
 from math import *
+from prim import primsAlgorithm, findNearestNode, plotMST
 
 display_width = 800
 display_height = 400
@@ -23,7 +24,7 @@ display = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Welcome to the Dungeon')
 
 #node_count equals to the number of nodes given to the algorithm
-node_count = 5
+node_count = 20
 x_min = 100
 x_max = display_width-100
 y_min = 50
@@ -131,6 +132,13 @@ def generateCoordinates(count: int):
 
         if candidate not in coordinates:
             coordinates.append(candidate)
+    
+    g=[(448, 339),
+        (226, 167),
+        (269, 292),
+        (100, 341),
+        (105, 243),
+        (690, 269)]
     
     return coordinates
 
@@ -242,9 +250,24 @@ while True:
     t.plot()
 
     triangulation = bowyerWatson(coordinates)
+    minimum_spanning_tree = primsAlgorithm(triangulation)
+    pygame.draw.circle(display, RED, minimum_spanning_tree[-1], 5)
+
 
     for triangle in triangulation:
         triangle.plot()
 
     pygame.display.flip()
-    pygame.time.wait(200)
+    pygame.time.wait(2000)
+
+    display.fill((0, 0, 0))
+    for c in coordinates:
+        pygame.draw.circle(display, BLUE, c, 4)
+    pygame.draw.circle(display, RED, minimum_spanning_tree[-1], 5)
+
+    plotMST(minimum_spanning_tree, display)
+
+    #print(findNearestNode(mst, mst[-1]))
+    
+    pygame.display.flip()
+    pygame.time.wait(4000)
