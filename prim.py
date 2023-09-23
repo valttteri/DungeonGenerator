@@ -20,11 +20,11 @@ tuples = [
 '''
 This function removes all duplicate edges from a triangulation.
 '''
-def uniqueEdges(triangles: list):
+def unique_edges(triangles: list):
     edge_list=set()
 
     for t in triangles:
-        edges = t.showEdges()
+        edges = t.show_edges()
         for e in edges:
             if (e[0], e[1]) in edge_list or (e[1], e[0]) in edge_list:
                 continue
@@ -32,11 +32,11 @@ def uniqueEdges(triangles: list):
     
     return edge_list
 
-def distanceBetweenNodes(a: tuple, b: tuple):
+def distance_between_nodes(a: tuple, b: tuple):
     distance = sqrt((b[0]-a[0])**2 + (b[1]-a[1])**2)
     return round(distance, 3)
 
-def createGraph(tuples: list):
+def create_graph(tuples: list):
     graph = {}
 
     for tuple in tuples:
@@ -46,7 +46,7 @@ def createGraph(tuples: list):
             graph[tuple[1]] = []
 
     for edge in tuples:
-        distance = distanceBetweenNodes(edge[1], edge[0])
+        distance = distance_between_nodes(edge[1], edge[0])
         if len(graph[edge[0]]) == 0:
             graph[edge[0]].append([edge[1], distance])
         else:
@@ -69,7 +69,7 @@ def createGraph(tuples: list):
     
     return graph
 
-def findMinimumEdge(edges: list):
+def find_minimum_edge(edges: list):
     min_edge = None
     min_weight = 10**10
     for node in edges:
@@ -80,7 +80,7 @@ def findMinimumEdge(edges: list):
     return min_edge
 
 #Return some of the removed edges in order to create alternate routes
-def findRemovedEdges(mst: list, edges: list):
+def find_removed_edges(mst: list, edges: list):
     removed = []
 
     for edge in edges:
@@ -101,11 +101,11 @@ def findRemovedEdges(mst: list, edges: list):
 Prim's algorithm for creating a minimum spanning tree based on a triangulation. I had to improvise a little in order to get
 this to work and therefore the code is probably not very readable.
 '''
-def primsAlgorithm(triangulation: dict):
+def prims_algorithm(triangulation: dict):
     #remove all duplicate edges from the triangulation
-    tuples = uniqueEdges(triangulation)
+    tuples = unique_edges(triangulation)
     #create a graph based on the triangulation
-    graph = createGraph(tuples)
+    graph = create_graph(tuples)
 
     minimum_spanning_tree = []
 
@@ -126,7 +126,7 @@ def primsAlgorithm(triangulation: dict):
     #start filling the minimum spanning tree one node at a time
     while len(minimum_spanning_tree) < len(graph)-1:
         #find the shortest edge
-        min_edge = findMinimumEdge(edges)
+        min_edge = find_minimum_edge(edges)
 
         minimum_spanning_tree.append(min_edge)
 
@@ -147,6 +147,6 @@ def primsAlgorithm(triangulation: dict):
     return minimum_spanning_tree
 
 if __name__ == '__main__':
-    mst = primsAlgorithm(tuples)
+    mst = prims_algorithm(tuples)
     print(mst)
-    print(findRemovedEdges(mst, tuples))
+    print(find_removed_edges(mst, tuples))

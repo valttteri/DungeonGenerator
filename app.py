@@ -14,15 +14,16 @@ import sys
 from random import randint
 from math import sqrt
 import pygame
-from prim import primsAlgorithm, findRemovedEdges, uniqueEdges
+from prim import prims_algorithm, unique_edges, find_removed_edges
 
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 400
 
-# comment out the following three lines for testing
-pygame.init()
-display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-pygame.display.set_caption("Welcome to the Dungeon")
+# comment out the following four lines for testing
+#pygame.init()
+#display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+#pygame.display.set_caption("Welcome to the Dungeon")
+#font = pygame.font.SysFont("Arial", 16)
 
 # NODE_COUNT equals to the number of nodes given to the algorithm
 NODE_COUNT = 10
@@ -31,8 +32,6 @@ X_MAX = DISPLAY_WIDTH - 100
 Y_MIN = 50
 Y_MAX = DISPLAY_HEIGHT - 50
 display_center = (DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2)
-
-font = pygame.font.SysFont("Arial", 16)
 
 """
 Hard coded coordinates for the super triangle. I might add a function for randomly generating
@@ -81,26 +80,26 @@ class Triangle:
 
         return self.id == other.id
 
-    def show_ID(self):
+    def show_id(self):
         return self.id
 
-    def showEdges(self):
+    def show_edges(self):
         return self.triangle_edges
 
-    def showNodes(self):
+    def show_nodes(self):
         return self.nodes
 
-    def circumCenter(self):
+    def circum_center(self):
         return self.circumcenter
 
-    def ccRadius(self):
+    def cc_radius(self):
         return self.circum_circles_radius
 
     def plot(self):
         for edge in self.triangle_edges:
             pygame.draw.line(display, GREEN, edge[0], edge[1])
 
-    def circumCircle(self):
+    def circum_circle(self):
         pygame.draw.circle(
             display, RED, self.circumcenter, radius=self.circum_circles_radius, width=2
         )
@@ -222,8 +221,8 @@ def bowyer_watson(nodelist: list):
     )
     super_triangle_nodes = []
 
-    # super_triangle_edges = super_triangle.showEdges()
-    super_triangle_nodes = super_triangle.showNodes()
+    # super_triangle_edges = super_triangle.show_edges()
+    super_triangle_nodes = super_triangle.show_nodes()
 
     triangulation.append(super_triangle)
 
@@ -233,8 +232,8 @@ def bowyer_watson(nodelist: list):
 
         # Step 3.
         for triangle in triangulation:
-            circumcenter = triangle.circumCenter()
-            circum_circles_radius = triangle.ccRadius()
+            circumcenter = triangle.circum_center()
+            circum_circles_radius = triangle.cc_radius()
 
             distance = distance_between_points(node, circumcenter)
             if distance <= circum_circles_radius:
@@ -244,11 +243,11 @@ def bowyer_watson(nodelist: list):
 
         # Step 4.
         for bad_triangle in bad_triangles:
-            edges = bad_triangle.showEdges()
+            edges = bad_triangle.show_edges()
             for edge in edges:
                 found = False
                 for other_triangle in bad_triangles:
-                    other_triangles_edges = other_triangle.showEdges()
+                    other_triangles_edges = other_triangle.show_edges()
                     if bad_triangle == other_triangle:
                         continue
 
@@ -270,7 +269,7 @@ def bowyer_watson(nodelist: list):
     # Step 7.
     remove_triangles = []
     for triangle in triangulation:
-        nodes = triangle.showNodes()
+        nodes = triangle.show_nodes()
         found = False
         for n in nodes:
             if found:
@@ -293,7 +292,7 @@ def plot_mst(coordinates: list):
 
 # visualising with pygame
 # comment out the entire loop for testing
-
+'''
 while True:
     for action in pygame.event.get():
         if action.type == pygame.QUIT:
@@ -312,8 +311,8 @@ while True:
     t.plot()
 
     triangulation = bowyer_watson(coordinates)
-    unique_edges = uniqueEdges(triangulation)
-    minimum_spanning_tree = primsAlgorithm(triangulation)
+    unique_edges = unique_edges(triangulation)
+    minimum_spanning_tree = prims_algorithm(triangulation)
 
     for triangle in triangulation:
         triangle.plot()
@@ -326,16 +325,17 @@ while True:
         pygame.draw.circle(display, BLUE, c, 4)
 
     plot_mst(minimum_spanning_tree)
-    removed_edges = findRemovedEdges(minimum_spanning_tree, unique_edges)
+    removed_edges = find_removed_edges(minimum_spanning_tree, unique_edges)
     for e in removed_edges:
         print(e)
 
     pygame.display.flip()
-    pygame.time.wait(2000)
+    pygame.time.wait(1000)
 
     for edge in removed_edges:
         pygame.draw.line(display, GREEN, edge[0], edge[1])
 
-    # pygame.display.flip()
-    # pygame.time.wait(10000)
+    pygame.display.flip()
+    pygame.time.wait(500)
     break
+'''
