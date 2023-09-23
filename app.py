@@ -20,13 +20,13 @@ DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 400
 
 # comment out the following four lines for testing
-#pygame.init()
-#display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-#pygame.display.set_caption("Welcome to the Dungeon")
-#font = pygame.font.SysFont("Arial", 16)
+pygame.init()
+display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+pygame.display.set_caption("Welcome to the Dungeon")
+font = pygame.font.SysFont("Arial", 16)
 
 # NODE_COUNT equals to the number of nodes given to the algorithm
-NODE_COUNT = 10
+NODE_COUNT = 12
 X_MIN = 100
 X_MAX = DISPLAY_WIDTH - 100
 Y_MIN = 50
@@ -42,6 +42,9 @@ super_coordinates = [(-10, -400), (1500, 300), (-10, 1200)]
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+WHITE = (255, 255, 255)
+LIGHTGRAY = (211, 211, 211)
+GRAY = (128, 128, 128)
 
 
 class Triangle:
@@ -103,6 +106,44 @@ class Triangle:
         pygame.draw.circle(
             display, RED, self.circumcenter, radius=self.circum_circles_radius, width=2
         )
+
+class Room:
+    """Class for plotting a room"""
+
+    new_id = itertools.count()
+
+    def __init__(self, center: tuple):
+        self.height = randint(10, 40)
+        self.width = randint(10, 60)
+        self.room_center = center
+        self.room_id = next(self.new_id)
+
+        self.top_left = (self.room_center[0] - self.width, self.room_center[1] + self.height)
+        self.bottom_left = (self.room_center[0] - self.width, self.room_center[1] - self.height)
+        self.top_right = (self.room_center[0] + self.width, self.room_center[1] + self.height)
+        self.bottom_right = (self.room_center[0] + self.width, self.room_center[1] - self.height)
+
+        self.top = [self.top_left, self.top_right]
+        self.bottom = [self.bottom_left, self.bottom_right]
+        self.left = [self.top_left, self.bottom_left]
+        self.right = [self.top_right, self.bottom_right]
+
+    def __str__(self):
+        return f"Room {self.room_id}, center at {self.room_center}"
+
+    def __repr__(self):
+        return f"Room {self.room_id}, center at {self.room_center}"
+
+    def center(self):
+        return self.room_center
+
+    def plot(self):
+        pygame.draw.polygon(display, LIGHTGRAY, [self.top_left, self.top_right, self.bottom_right, self.bottom_left])
+        pygame.draw.line(display, GRAY, self.top[0], self.top[1])
+        pygame.draw.line(display, GRAY, self.left[0], self.left[1])
+        pygame.draw.line(display, GRAY, self.right[0], self.right[1])
+        pygame.draw.line(display, GRAY, self.bottom[0], self.bottom[1])
+
 
 
 def find_circumcenter(coordinates: list):
@@ -189,6 +230,15 @@ def are_edges_equal(edge_1: list, edge_2: list):
     return (edge_1[0] == edge_2[0] and edge_1[1] == edge_2[1]) or (
         edge_1[0] == edge_2[1] and edge_1[1] == edge_2[0]
     )
+
+def generate_rooms(coordinates: list):
+    room_list = []
+
+    for coordinate in coordinates:
+        new_room = Room(coordinate)
+        room_list.append(new_room)
+    
+    return room_list
 
 
 def bowyer_watson(nodelist: list):
@@ -289,10 +339,11 @@ def plot_mst(coordinates: list):
     for coordinate in coordinates:
         pygame.draw.line(display, GREEN, coordinate[0], coordinate[1])
 
-
-# visualising with pygame
-# comment out the entire loop for testing
 '''
+visualising with pygame
+comment out the entire loop for testing
+'''
+
 while True:
     for action in pygame.event.get():
         if action.type == pygame.QUIT:
@@ -301,11 +352,15 @@ while True:
     display.fill((0, 0, 0))
 
     coordinates = generate_coordinates(NODE_COUNT)
+    rooms = generate_rooms(coordinates)
 
     for c in coordinates:
         pygame.draw.circle(display, BLUE, c, 4)
         # text = font.render(f'{c}', True, GREEN)
         # display.blit(text, c)
+    
+    #pygame.display.flip()
+    #pygame.time.wait(300)
 
     t = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2])
     t.plot()
@@ -318,7 +373,7 @@ while True:
         triangle.plot()
 
     pygame.display.flip()
-    pygame.time.wait(1000)
+    pygame.time.wait(500)
 
     display.fill((0, 0, 0))
     for c in coordinates:
@@ -326,16 +381,22 @@ while True:
 
     plot_mst(minimum_spanning_tree)
     removed_edges = find_removed_edges(minimum_spanning_tree, unique_edges)
-    for e in removed_edges:
-        print(e)
+    #for e in removed_edges:
+    #    print(e)
 
     pygame.display.flip()
-    pygame.time.wait(1000)
+    pygame.time.wait(500)
 
     for edge in removed_edges:
         pygame.draw.line(display, GREEN, edge[0], edge[1])
 
     pygame.display.flip()
     pygame.time.wait(500)
+
+    for room in rooms:
+        room.plot()
+
+    pygame.display.flip()
+    pygame.time.wait(15000)
+
     break
-'''
