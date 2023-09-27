@@ -2,15 +2,12 @@ import unittest
 import xmlrunner
 import app
 import tools
+from random import randint
 from classes.triangleclass import Triangle
 from bowyerwatson import bowyer_watson
 
 class TestTools(unittest.TestCase):
     def setUp(self):
-        self.no_duplicates = True
-        self.not_near_each_other = True
-        self.enough_coordinates = True
-
         self.DISPLAY_WIDTH = 800
         self.DISPLAY_HEIGHT = 400
         self.NODE_COUNT = 12
@@ -24,9 +21,6 @@ class TestTools(unittest.TestCase):
 
     def tearDown(self):
         del self.coordinates
-        del self.no_duplicates
-        del self.not_near_each_other
-        del self.enough_coordinates
 
     def test_find_circumcenter(self):
         self.assertEqual(tools.find_circumcenter([(1,1), (3,5), (7,3)]), (4,2))
@@ -48,20 +42,55 @@ class TestTools(unittest.TestCase):
         self.assertFalse(tools.are_edges_equal([(3, 4), (7, 6)], [(7, 6), (1, 1)]))
     
     def test_generate_coordinates(self):
+        no_duplicates = True
+        not_near_each_other = True
+        enough_coordinates = True
+
         for coordinate in self.coordinates:
             if self.coordinates.count(coordinate) > 1:
-                self.no_duplicates = False
+                no_duplicates = False
             for other in self.coordinates:
                 if coordinate == other:
                     continue
                 if tools.distance_between_points(coordinate, other) < 100:
-                    self.not_near_each_other = False
+                    not_near_each_other = False
         if len(self.coordinates) != 10:
-            self.enough_coordinates = False
+            enough_coordinates = False
         
-        self.assertTrue(self.no_duplicates)
-        self.assertTrue(self.not_near_each_other)
-        self.assertTrue(self.enough_coordinates)
+        self.assertTrue(no_duplicates)
+        self.assertTrue(not_near_each_other)
+        self.assertTrue(enough_coordinates)
+
+    def test_unique_edges(self):
+        no_duplicates = True
+        edges = list(tools.unique_edges(self.triangulation))
+
+        for i in range(len(edges)):
+            for j in range(len(edges)):
+                if i == j:
+                    continue
+                if tools.are_edges_equal(edges[i], edges[j]):
+                    self.assertFalse(no_duplicates)
+        self.assertTrue(no_duplicates)
+
+    def test_find_minimum_edge(self):
+        found_correct_edge = True
+        extra_coordinate = (1111, 1234)
+        extra_end_node = ((1111, 1244), randint(1, 80))
+        edges = {}
+
+        edges[extra_coordinate] = extra_end_node
+
+        for coordinate in self.coordinates:
+            other_node = (randint(1000, 1500), randint(1000, 1500))
+            distance = (randint(200, 300))
+            edges[coordinate] = (other_node, distance)
+        
+        
+        minimum_edge = tools.find_minimum_edge(edges)
+        if minimum_edge != (extra_end_node[0], extra_coordinate):
+            self.assertTrue(found_correct_edge)
+        self.assertTrue(found_correct_edge)
 
 class TestBowyerWatson(unittest.TestCase):
     def test_bowyer_watson(self):

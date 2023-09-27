@@ -110,7 +110,7 @@ def create_graph(tuples: list):
     
     return graph
 
-def find_minimum_edge(edges: list):
+def find_minimum_edge(edges: dict):
     min_edge = None
     min_weight = 10**10
     for node in edges:
