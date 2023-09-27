@@ -120,5 +120,5 @@ if __name__ == '__main__':
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(30000)
+        pygame.time.wait(2000)
         break

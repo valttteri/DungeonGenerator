@@ -23,13 +23,13 @@ def find_circumcenter(coordinates: list):
         + (bx * bx + by * by) * (ax - cx)
         + (cx * cx + cy * cy) * (bx - ax)
     ) / d
-    return ux, uy
+    return round(ux, 3), round(uy, 3)
 
 # Calculate the distance between two points
 def distance_between_points(point_a: tuple, point_b: tuple):
     """Calculate the distance between two nodes"""
 
-    distance = sqrt((point_b[0] - point_a[0]) ** 2 + (point_b[1] - point_a[1]) ** 2)
+    distance = round(sqrt((point_b[0] - point_a[0]) ** 2 + (point_b[1] - point_a[1]) ** 2), 3)
     return distance
 
 # Generate coordinates in a way to avoid duplicates
