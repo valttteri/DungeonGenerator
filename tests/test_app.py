@@ -5,10 +5,6 @@ import tools
 from classes.triangleclass import Triangle
 from bowyerwatson import bowyer_watson
 
-'''
-In order to run the tests, each line in app.py referring to pygame must be commented out
-'''
-
 class TestTools(unittest.TestCase):
     def setUp(self):
         self.no_duplicates = True
@@ -24,6 +20,7 @@ class TestTools(unittest.TestCase):
         self.Y_MAX = self.DISPLAY_HEIGHT - 50
 
         self.coordinates = tools.generate_coordinates(10, self.X_MIN, self.X_MAX, self.Y_MIN, self.Y_MAX)
+        self.triangulation = bowyer_watson(self.coordinates, 1)
 
     def tearDown(self):
         del self.coordinates

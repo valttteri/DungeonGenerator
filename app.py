@@ -8,7 +8,7 @@ The variable "NODE_COUNT" equals to the number of nodes given to the algorithm.
 
 import sys
 import pygame
-from prim import prims_algorithm, unique_edges, find_removed_edges, create_graph
+from prim import prims_algorithm
 from bowyerwatson import bowyer_watson
 import tools
 import itertools
@@ -57,18 +57,7 @@ if __name__ == '__main__':
 
         display.fill((0, 0, 0))
 
-        coordinates = [(700, 162),
-                       (491, 165), 
-                       (529, 332), 
-                       (418, 255), 
-                       (357, 165), 
-                       (214, 122), 
-                       (289, 311), 
-                       (136, 51), 
-                       (122, 257), 
-                       (477, 53), 
-                       (686, 56), 
-                       (576, 95)]#tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
+        coordinates = tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
         
         #print(coordinates)
         rooms = generate_rooms(coordinates, display)
@@ -79,46 +68,45 @@ if __name__ == '__main__':
             # display.blit(text, c)
 
         pygame.display.flip()
-        pygame.time.wait(500)
+        pygame.time.wait(300)
 
         t = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2], display)
         t.plot()
 
         triangulation = bowyer_watson(coordinates, display)
-        edges = unique_edges(triangulation)
+        edges = tools.unique_edges(triangulation)
         minimum_spanning_tree = prims_algorithm(triangulation)
 
         for triangle in triangulation:
             triangle.plot()
 
         pygame.display.flip()
-        pygame.time.wait(500)
+        pygame.time.wait(300)
 
         display.fill((0, 0, 0))
         for c in coordinates:
             pygame.draw.circle(display, BLUE, c, 4)
 
         plotting.plot_mst(minimum_spanning_tree, display, GREEN)
-        removed_edges = find_removed_edges(minimum_spanning_tree, edges)
+        removed_edges = tools.find_removed_edges(minimum_spanning_tree, edges)
 
         pygame.display.flip()
-        pygame.time.wait(500)
+        pygame.time.wait(300)
         all_edges = minimum_spanning_tree
         for edge in removed_edges:
             all_edges.append(edge)
             pygame.draw.line(display, GREEN, edge[0], edge[1])
 
-        dungeon_graph = create_graph(all_edges)
+        dungeon_graph = tools.create_graph(all_edges)
         #for key, value in dungeon_graph.items():
         #    for each in value:
         #        pygame.draw.line(display, RED, key, each[0])
 
         pygame.display.flip()
-        pygame.time.wait(500)
+        pygame.time.wait(300)
 
         for room in rooms:
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(2000)
-        break
+        pygame.time.wait(300)
