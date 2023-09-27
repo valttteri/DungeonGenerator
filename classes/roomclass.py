@@ -51,16 +51,31 @@ def generate_rooms(coordinates: list, display):
     room_list = []
 
     for coordinate in coordinates:
+        room_added = False
+        while not room_added:
 
+            if len(room_list) == 0:
+                room_list.append(Room(coordinate, randint(15, 50), randint(15,50), display))
+                room_added = True
+            else:
+                room_height = randint(15, 50)
+                room_width = randint(15, 50)
+                rooms_overlap = False
 
-        if len(room_list) == 0:
-            room_list.append(Room(coordinate, randint(15, 45), randint(15, 60), display))
-            continue
-        #height_valid = True
-        #width_valid = True
-        room_height = randint(15, 45)
-        room_width = randint(15, 60)
-        new_room = Room(coordinate, room_height, room_width, display)
-        room_list.append(new_room)
+                for room in room_list:
+                    if in_top_left(room, coordinate, room_height, room_width):
+                        rooms_overlap = True
+
+                if not rooms_overlap:
+                    new_room = Room(coordinate, room_height, room_width, display)
+                    room_list.append(new_room)
+                    room_added = True
     
     return room_list
+
+def in_top_left(room: object, center: tuple, height: int, width: int):
+
+    if room.room_center[0] < center[0] - width < room.room_center[0] + room.width:
+        if room.room_center[1] < center[1] - height < room.room_center[1] + room.height:
+            return True
+    return False
