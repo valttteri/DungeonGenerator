@@ -20,11 +20,11 @@ class Hallway:
         self.start_node = start_room.center()
         self.end_node = end_room.center()
 
-        self.start_room_width = start_room.width
-        self.start_room_height = start_room.height
+        self.start_room_width = start_room.width()
+        self.start_room_height = start_room.height()
 
-        self.end_room_width = end_room.width
-        self.end_room_height = end_room.height
+        self.end_room_width = end_room.width()
+        self.end_room_height = end_room.height()
 
     def __str__(self):
         return f"Hallway between rooms {self.start_room.center()}, and {self.end_room.center()}"
@@ -33,7 +33,24 @@ class Hallway:
         return f"Hallway between rooms {self.start_room.center()}, and {self.end_room.center()}"
     
     def plot(self):
-        pygame.draw.line(self.display, RED, self.start_node, self.end_node)
+        horizontal = False
+        vertical = False
+        incline = True
+
+        if abs(self.start_node[0] - self.end_node[0]) < 20:
+            horizontal = True
+            incline = False
+        elif abs(self.start_node[1] - self.end_node[1]) < 20:
+            vertical = True
+            incline = False
+
+        if horizontal:
+            pygame.draw.line(self.display, RED, self.start_node, (self.start_node[0], self.end_node[1]), width=4)
+        if vertical:
+            pygame.draw.line(self.display, RED, self.start_node, (self.end_node[0], self.start_node[1]), width=4)
+        if incline:
+            pygame.draw.line(self.display, RED, self.start_node, (self.end_node[0], self.start_node[1]), width=4)
+            pygame.draw.line(self.display, RED, (self.end_node[0], self.start_node[1]), self.end_node, width=4)
 
 def generate_hallways(graph: dict, rooms: list, display):
     used_nodes = set()

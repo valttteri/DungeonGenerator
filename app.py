@@ -71,7 +71,7 @@ def dungeon_generator():
             (539, 161),
             (700, 340)
         ]
-        #tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
+        #coordinates = tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
         
         for c in coordinates:
             pygame.draw.circle(display, BLUE, c, 4)
@@ -91,8 +91,8 @@ def dungeon_generator():
         for triangle in triangulation:
             triangle.plot()
 
-        pygame.display.flip()
-        pygame.time.wait(300)
+        #pygame.display.flip()
+        #pygame.time.wait(300)
 
         display.fill((0, 0, 0))
         for c in coordinates:
@@ -102,12 +102,12 @@ def dungeon_generator():
         plotting.plot_mst(minimum_spanning_tree, display, GREEN)
         removed_edges = tools.find_removed_edges(minimum_spanning_tree, edges)
 
-        pygame.display.flip()
-        pygame.time.wait(300)
+        #pygame.display.flip()
+        #pygame.time.wait(300)
         all_edges = minimum_spanning_tree
-        #for edge in removed_edges:
-        #    all_edges.append(edge)
-        #    pygame.draw.line(display, GREEN, edge[0], edge[1])
+        for edge in removed_edges:
+            all_edges.append(edge)
+            pygame.draw.line(display, GREEN, edge[0], edge[1])
 
         dungeon_graph = tools.create_graph(all_edges)
         #for key, value in dungeon_graph.items():
@@ -115,23 +115,26 @@ def dungeon_generator():
         #    for each in value:
         #        pygame.draw.line(display, RED, key, each[0])
 
-        pygame.display.flip()
-        pygame.time.wait(300)
+        #pygame.display.flip()
+        #pygame.time.wait(300)
 
         rooms = generate_rooms(coordinates, display)
         for room in rooms:
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(2000)
+        pygame.time.wait(3000)
+        display.fill((0, 0, 0))
 
         hallways = generate_hallways(dungeon_graph, rooms, display)
         for h in hallways:
             h.plot()
+            
+        for room in rooms:
+            room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(3000)
-
+        pygame.time.wait(10000)
         break
 
 if __name__ == '__main__':

@@ -15,16 +15,16 @@ class Room:
     new_id = itertools.count()
 
     def __init__(self, center: tuple, height: int, width: int, display):
-        self.height = height
-        self.width = width
+        self.room_height = height
+        self.room_width = width
         self.room_center = center
         self.room_id = next(self.new_id)
         self.display = display
 
-        self.top_left = (self.room_center[0] - self.width, self.room_center[1] + self.height)
-        self.bottom_left = (self.room_center[0] - self.width, self.room_center[1] - self.height)
-        self.top_right = (self.room_center[0] + self.width, self.room_center[1] + self.height)
-        self.bottom_right = (self.room_center[0] + self.width, self.room_center[1] - self.height)
+        self.top_left = (self.room_center[0] - self.room_width, self.room_center[1] + self.room_height)
+        self.bottom_left = (self.room_center[0] - self.room_width, self.room_center[1] - self.room_height)
+        self.top_right = (self.room_center[0] + self.room_width, self.room_center[1] + self.room_height)
+        self.bottom_right = (self.room_center[0] + self.room_width, self.room_center[1] - self.room_height)
 
         self.top = [self.top_left, self.top_right]
         self.bottom = [self.bottom_left, self.bottom_right]
@@ -36,6 +36,12 @@ class Room:
 
     def __repr__(self):
         return f"Room {self.room_id}, center at {self.room_center}"
+    
+    def width(self):
+        return self.room_width
+    
+    def height(self):
+        return self.room_height
 
     def center(self):
         return self.room_center
@@ -75,7 +81,7 @@ def generate_rooms(coordinates: list, display):
 
 def in_top_left(room: object, center: tuple, height: int, width: int):
 
-    if room.room_center[0] < center[0] - width < room.room_center[0] + room.width:
-        if room.room_center[1] < center[1] - height < room.room_center[1] + room.height:
+    if room.room_center[0] < center[0] - width < room.room_center[0] + room.width():
+        if room.room_center[1] < center[1] - height < room.room_center[1] + room.height():
             return True
     return False
