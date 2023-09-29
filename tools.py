@@ -1,29 +1,36 @@
 from math import sqrt
 from random import randint
 
-def find_circumcenter(coordinates: list):
-    """Find cartesian coordinates of a triangle's circumcenter.
+def find_circumcenter(coordinate_list: list):
+    """Find cartesian coordinate_list of a triangle's circumcenter.
     I found the formula from this website: https://en.wikipedia.org/wiki/Circumcircle"""
 
-    ax = coordinates[0][0]
-    ay = coordinates[0][1]
-    bx = coordinates[1][0]
-    by = coordinates[1][1]
-    cx = coordinates[2][0]
-    cy = coordinates[2][1]
+    first_x = coordinate_list[0][0]
+    first_y = coordinate_list[0][1]
+    second_x = coordinate_list[1][0]
+    second_y = coordinate_list[1][1]
+    third_x = coordinate_list[2][0]
+    third_y = coordinate_list[2][1]
 
-    d = 2 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
-    ux = (
-        (ax * ax + ay * ay) * (by - cy)
-        + (bx * bx + by * by) * (cy - ay)
-        + (cx * cx + cy * cy) * (ay - by)
-    ) / d
-    uy = (
-        (ax * ax + ay * ay) * (cx - bx)
-        + (bx * bx + by * by) * (ax - cx)
-        + (cx * cx + cy * cy) * (bx - ax)
-    ) / d
-    return round(ux, 3), round(uy, 3)
+    divider = 2 * (
+        first_x * (second_y - third_y)
+        + second_x * (third_y - first_y)
+        + third_x * (first_y - second_y)
+    )
+
+    result_x = (
+        (first_x * first_x + first_y * first_y) * (second_y - third_y)
+        + (second_x * second_x + second_y * second_y) * (third_y - first_y)
+        + (third_x * third_x + third_y * third_y) * (first_y - second_y)
+    ) / divider
+
+    result_y = (
+        (first_x * first_x + first_y * first_y) * (third_x - second_x)
+        + (second_x * second_x + second_y * second_y) * (first_x - third_x)
+        + (third_x * third_x + third_y * third_y) * (second_x - first_x)
+    ) / divider
+    
+    return round(result_x, 3), round(result_y, 3)
 
 # Calculate the distance between two points
 def distance_between_points(point_a: tuple, point_b: tuple):
@@ -33,16 +40,16 @@ def distance_between_points(point_a: tuple, point_b: tuple):
     return distance
 
 # Generate coordinates in a way to avoid duplicates
-def generate_coordinates(count: int, X_MIN: int, X_MAX: int, Y_MIN: int, Y_MAX: int):
+def generate_coordinates(count: int, min_x: int, max_x: int, min_y: int, max_y: int):
     """Generate coordinates for the triangulation"""
 
     coordinate_list = []
 
     while len(coordinate_list) < count:
         valid = True
-        x = randint(X_MIN, X_MAX)
-        y = randint(Y_MIN, Y_MAX)
-        candidate = (x, y)
+        x_coordinate = randint(min_x, max_x)
+        y_coordinate = randint(min_y, max_y)
+        candidate = (x_coordinate, y_coordinate)
 
         if candidate in coordinate_list:
             valid = False
@@ -74,19 +81,19 @@ def unique_edges(triangles: list):
             if (edge[0], edge[1]) in edge_list or (edge[1], edge[0]) in edge_list:
                 continue
             edge_list.add((edge[0], edge[1]))
-    
+
     return edge_list
 
-def create_graph(tuples: list):
+def create_graph(edges: list):
     graph = {}
 
-    for tuple in tuples:
-        if tuple[0] not in graph:
-            graph[tuple[0]] = []
-        if tuple[1] not in graph:
-            graph[tuple[1]] = []
+    for edge in edges:
+        if edge[0] not in graph:
+            graph[edge[0]] = []
+        if edge[1] not in graph:
+            graph[edge[1]] = []
 
-    for edge in tuples:
+    for edge in edges:
         distance = distance_between_points(edge[1], edge[0])
         if len(graph[edge[0]]) == 0:
             graph[edge[0]].append([edge[1], distance])
@@ -107,7 +114,7 @@ def create_graph(tuples: list):
                     found = True
             if not found:
                 graph[edge[1]].append([edge[0], distance])
-    
+
     return graph
 
 def find_minimum_edge(edges: dict):
@@ -117,7 +124,7 @@ def find_minimum_edge(edges: dict):
         if edges[node][1] < min_weight:
             min_edge = (edges[node][0], node)
             min_weight = edges[node][1]
-    
+
     return min_edge
 
 def find_removed_edges(minimum_spanning_tree: list, edges: list):
@@ -134,5 +141,5 @@ def find_removed_edges(minimum_spanning_tree: list, edges: list):
             valid = False
         if valid:
             removed.append(edge)
-    
+
     return removed

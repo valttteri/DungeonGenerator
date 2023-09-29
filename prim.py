@@ -1,6 +1,3 @@
-from math import *
-from heapq import *
-from random import *
 import tools
 
 GREEN = (0, 255, 0)
@@ -34,7 +31,7 @@ def prims_algorithm(triangulation: dict):
 
     #starting node is always the first one in the list
     starting_node = list(graph.keys())[0]
-    
+
     #empty data structure to keep track of the edges we need to examine
     edges = {}
 
@@ -45,7 +42,7 @@ def prims_algorithm(triangulation: dict):
     """
     for n in graph[starting_node]:
         edges[n[0]] = (starting_node, n[1])
-    
+
     #start filling the minimum spanning tree one node at a time
     while len(minimum_spanning_tree) < len(graph)-1:
         #find the shortest edge

@@ -18,5 +18,16 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
-    "python.formatting.provider": "none"
+    "python.formatting.provider": "none",
+    "runItOn": {
+        "commands": [
+            {
+                "match": "//.py$",
+                "isAsync": true,
+                "isShellCommand": false,
+                "cmd": "python -m coverage run -m unittest tests\\test_app.py",
+                "useShortcut": true
+            }
+        ]
+    }
 }

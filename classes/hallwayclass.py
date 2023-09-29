@@ -1,6 +1,13 @@
 import itertools
 import pygame
 
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+WHITE = (255, 255, 255)
+LIGHTGRAY = (211, 211, 211)
+GRAY = (128, 128, 128)
+
 class Hallway:
     """Class for visualizing a hallway"""
     new_id = itertools.count()
@@ -10,8 +17,8 @@ class Hallway:
         self.end_room = end_room
         self.display = display
         self.hallway_id = next(self.new_id)
-        self.start_node = start_room.center
-        self.end_node = end_room.center
+        self.start_node = start_room.center()
+        self.end_node = end_room.center()
 
         self.start_room_width = start_room.width
         self.start_room_height = start_room.height
@@ -19,8 +26,48 @@ class Hallway:
         self.end_room_width = end_room.width
         self.end_room_height = end_room.height
 
-def plot_hallways():
-    pass
+    def __str__(self):
+        return f"Hallway between rooms {self.start_room.center()}, and {self.end_room.center()}"
+
+    def __repr__(self):
+        return f"Hallway between rooms {self.start_room.center()}, and {self.end_room.center()}"
+    
+    def plot(self):
+        pygame.draw.line(self.display, RED, self.start_node, self.end_node)
+
+def generate_hallways(graph: dict, rooms: list, display):
+    used_nodes = set()
+    hallways = []
+
+    for start_node, end_nodes in graph.items():
+        if start_node in used_nodes:
+            continue
+        for end_node in end_nodes:
+            if end_node[0] in used_nodes:
+                continue
+            starting_room, ending_room = find_hallways_rooms(start_node, end_node[0], rooms)
+            hallways.append(Hallway(starting_room, ending_room, display))
+        used_nodes.add(start_node)
+    
+    return hallways
+
+def find_hallways_rooms(start_node, end_node, rooms):
+    starting_room = None
+    ending_room = None
+
+    for room in rooms:
+        #print(f"room center: {room.center()}")
+        if room.center() == start_node:
+            starting_room = room
+        elif room.center() == end_node:
+            ending_room = room
+    
+    if starting_room != None != ending_room:
+        return starting_room, ending_room
+    print(f"no hallway found between nodes {start_node} and {end_node}")
+
+
+        
 
 """
 käytävä tarvitsee tiedot

@@ -11,10 +11,10 @@ import pygame
 from prim import prims_algorithm
 from bowyerwatson import bowyer_watson
 import tools
-import itertools
 import plotting
 from classes.triangleclass import Triangle
 from classes.roomclass import generate_rooms
+from classes.hallwayclass import generate_hallways
 
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 400
@@ -44,7 +44,7 @@ GRAY = (128, 128, 128)
 visualising with pygame
 """
 
-if __name__ == '__main__':
+def dungeon_generator():
     pygame.init()
     display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
     pygame.display.set_caption("Welcome to the Dungeon")
@@ -57,11 +57,22 @@ if __name__ == '__main__':
 
         display.fill((0, 0, 0))
 
-        coordinates = tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
+        coordinates = [
+            (382, 214),
+            (320, 74),
+            (447, 292),
+            (503, 58),
+            (610, 279),
+            (134, 118),
+            (105, 271),
+            (657, 133),
+            (278, 199),
+            (260, 341),
+            (539, 161),
+            (700, 340)
+        ]
+        #tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
         
-        #print(coordinates)
-        rooms = generate_rooms(coordinates, display)
-
         for c in coordinates:
             pygame.draw.circle(display, BLUE, c, 4)
             # text = font.render(f'{c}', True, GREEN)
@@ -86,6 +97,7 @@ if __name__ == '__main__':
         display.fill((0, 0, 0))
         for c in coordinates:
             pygame.draw.circle(display, BLUE, c, 4)
+            #print(c)
 
         plotting.plot_mst(minimum_spanning_tree, display, GREEN)
         removed_edges = tools.find_removed_edges(minimum_spanning_tree, edges)
@@ -93,20 +105,34 @@ if __name__ == '__main__':
         pygame.display.flip()
         pygame.time.wait(300)
         all_edges = minimum_spanning_tree
-        for edge in removed_edges:
-            all_edges.append(edge)
-            pygame.draw.line(display, GREEN, edge[0], edge[1])
+        #for edge in removed_edges:
+        #    all_edges.append(edge)
+        #    pygame.draw.line(display, GREEN, edge[0], edge[1])
 
         dungeon_graph = tools.create_graph(all_edges)
         #for key, value in dungeon_graph.items():
+        #    print(f"{key}: {value}")
         #    for each in value:
         #        pygame.draw.line(display, RED, key, each[0])
 
         pygame.display.flip()
         pygame.time.wait(300)
 
+        rooms = generate_rooms(coordinates, display)
         for room in rooms:
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(300)
+        pygame.time.wait(2000)
+
+        hallways = generate_hallways(dungeon_graph, rooms, display)
+        for h in hallways:
+            h.plot()
+
+        pygame.display.flip()
+        pygame.time.wait(3000)
+
+        break
+
+if __name__ == '__main__':
+    dungeon_generator()
