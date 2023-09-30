@@ -21,28 +21,24 @@ def bowyer_watson(nodelist: list, display):
 
     5. Remove each bad triangle from the triangulation.
 
-    6. Create a new triangle between the node and every edge in the list polygon.
+    6. Create a new triangle between the node and every edge in the polygon.
 
     7. Check if there are triangles in the triangulation that share a node
     or an edge with the original super triangle. If so, remove these triangles.
     """
-    # Step 1.
+    """Step 1."""
     triangulation = []
     super_triangle = Triangle(
         super_coordinates[0], super_coordinates[1], super_coordinates[2], display
     )
-    super_triangle_nodes = []
-
-    # super_triangle_edges = super_triangle.show_edges()
     super_triangle_nodes = super_triangle.show_nodes()
-
     triangulation.append(super_triangle)
 
-    # Step 2.
+    """Step 2."""
     for node in nodelist:
         bad_triangles = []
 
-        # Step 3.
+        """Step 3."""
         for triangle in triangulation:
             circumcenter = triangle.circum_center()
             circum_circles_radius = triangle.cc_radius()
@@ -53,7 +49,7 @@ def bowyer_watson(nodelist: list, display):
 
         polygon = []
 
-        # Step 4.
+        """Step 4."""
         for bad_triangle in bad_triangles:
             edges = bad_triangle.show_edges()
             for edge in edges:
@@ -69,24 +65,24 @@ def bowyer_watson(nodelist: list, display):
                 if not found:
                     polygon.append(edge)
 
-        # Step 5.
+        """Step 5."""
         for bad_triangle in bad_triangles:
             triangulation.remove(bad_triangle)
 
-        # Step 6.
+        """Step 6."""
         for edge in polygon:
             new_triangle = Triangle(edge[0], edge[1], node, display)
             triangulation.append(new_triangle)
 
-    # Step 7.
+    """Step 7."""
     remove_triangles = []
     for triangle in triangulation:
         nodes = triangle.show_nodes()
         found = False
-        for n in nodes:
+        for node in nodes:
             if found:
                 continue
-            if n in super_triangle_nodes:
+            if node in super_triangle_nodes:
                 found = True
                 remove_triangles.append(triangle)
     for triangle in remove_triangles:

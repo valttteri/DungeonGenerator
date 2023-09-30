@@ -31,28 +31,55 @@ class Hallway:
 
     def __repr__(self):
         return f"Hallway between rooms {self.start_room.center()}, and {self.end_room.center()}"
-    
-    def plot(self):
-        horizontal = False
-        vertical = False
-        incline = True
 
-        if abs(self.start_node[0] - self.end_node[0]) < 20:
-            horizontal = True
-            incline = False
-        elif abs(self.start_node[1] - self.end_node[1]) < 20:
-            vertical = True
-            incline = False
+def plot_hallways(display, hallways: list, rooms:list):
+    """
+    Function for plotting the hallways. Right now I'm working on plotting the L-shaped hallways
+    correctly. They shouldnät go through rooms
+    """
+    for hallway in hallways:
+        start = hallway.start_node
+        end = hallway.end_node
 
-        if horizontal:
-            pygame.draw.line(self.display, RED, self.start_node, (self.start_node[0], self.end_node[1]), width=4)
-        if vertical:
-            pygame.draw.line(self.display, RED, self.start_node, (self.end_node[0], self.start_node[1]), width=4)
-        if incline:
-            pygame.draw.line(self.display, RED, self.start_node, (self.end_node[0], self.start_node[1]), width=4)
-            pygame.draw.line(self.display, RED, (self.end_node[0], self.start_node[1]), self.end_node, width=4)
+        #plot a horizontal line
+        if abs(start[0] - end[0]) < 20:
+            pygame.draw.line(display, RED, start, (start[0], end[1]), width=4)
+            continue
+        #plot a vertical line
+        if abs(start[1] - end[1]) < 20:
+            pygame.draw.line(hallway.display, RED, start, (end[0], start[1]), width=4)
+            continue
+        pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
+        pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
+        #check if there are rooms in the way
+        for room in rooms:
+            pass
+        #    #end in bottom right
+        #    if start[0] < end[0] and start[1] < end[1]:
+        #        right_corner = (end[0], start[1])
+        #        bottom_corner = (start[0], end[1])
+
+        #        if start[0] < room.center()[0] < end[0] and room.center()[1] + room.height() < start[1] < room.center - room.height(): 
+        #            pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
+        #            pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
+        #            continue
+        #        if start[1] < room.center()[1]
+
+            #end in bottom right
+            #if start[0] > end[0] and start[1] < end[1]:
+            #    corner_point = (end[0], start[1])
+
+            #room in top left
+            #if start[0] < end[0] and start[0] < end[0]:
+            #    corner_point = (end[0], start[1])
+
+            #room in top right
+            #if start[0] < end[0] and start[0] < end[0]:
+            #    corner_point = (end[0], start[1])
+
 
 def generate_hallways(graph: dict, rooms: list, display):
+    """Function for generating hallway objects"""
     used_nodes = set()
     hallways = []
 
@@ -65,39 +92,20 @@ def generate_hallways(graph: dict, rooms: list, display):
             starting_room, ending_room = find_hallways_rooms(start_node, end_node[0], rooms)
             hallways.append(Hallway(starting_room, ending_room, display))
         used_nodes.add(start_node)
-    
+
     return hallways
 
 def find_hallways_rooms(start_node, end_node, rooms):
+    """This function finds out which rooms are located at the ends of a hallway"""
     starting_room = None
     ending_room = None
 
     for room in rooms:
-        #print(f"room center: {room.center()}")
         if room.center() == start_node:
             starting_room = room
         elif room.center() == end_node:
             ending_room = room
-    
+
     if starting_room != None != ending_room:
         return starting_room, ending_room
-    print(f"no hallway found between nodes {start_node} and {end_node}")
-
-
-        
-
-"""
-käytävä tarvitsee tiedot
-- alkusolmun koordinaatit
-- loppusolmun koordinaatit
-- alkusolmuun liitettävän huoneen mitat
-- loppusolmuun liitettävän huoneen mitat
-- anna syötteenä alkupään ja loppupään huoneet
-
-plottaaminen
-- jos käytävä on lähes suora, plottaa suora viiva
-- vertaa y/x koordinaatteja ja sen perusteella päätä kummasta päästä viiva lähtee
-
-- jos käytävä ei ole suora, plottaa kaksi viivaa joiden välillä 90 asteen kulma
-- jos viiva on nosuseva, plottaa ensin suoraan ylöspäin ja sitten vasemmalle/oikealle
-"""
+    return f"no hallway found between nodes {start_node} and {end_node}"

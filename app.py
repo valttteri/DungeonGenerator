@@ -14,12 +14,12 @@ import tools
 import plotting
 from classes.triangleclass import Triangle
 from classes.roomclass import generate_rooms
-from classes.hallwayclass import generate_hallways
+from classes.hallwayclass import generate_hallways, plot_hallways
 
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 400
 
-""" NODE_COUNT equals to the number of nodes given to the algorithm"""
+"""NODE_COUNT equals to the number of nodes given to the algorithm"""
 NODE_COUNT = 12
 X_MIN = 100
 X_MAX = DISPLAY_WIDTH - 100
@@ -40,15 +40,12 @@ WHITE = (255, 255, 255)
 LIGHTGRAY = (211, 211, 211)
 GRAY = (128, 128, 128)
 
-"""
-visualising with pygame
-"""
+"""Visualising with pygame"""
 
 def dungeon_generator():
     pygame.init()
     display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
     pygame.display.set_caption("Welcome to the Dungeon")
-    font = pygame.font.SysFont("Arial", 16)
 
     while True:
         for action in pygame.event.get():
@@ -57,85 +54,82 @@ def dungeon_generator():
 
         display.fill((0, 0, 0))
 
-        coordinates = [
-            (382, 214),
-            (320, 74),
-            (447, 292),
-            (503, 58),
-            (610, 279),
-            (134, 118),
-            (105, 271),
-            (657, 133),
-            (278, 199),
-            (260, 341),
-            (539, 161),
-            (700, 340)
-        ]
-        #coordinates = tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
-        
-        for c in coordinates:
-            pygame.draw.circle(display, BLUE, c, 4)
-            # text = font.render(f'{c}', True, GREEN)
-            # display.blit(text, c)
+        """Hard coded coordinates for testing"""
+        #coordinates = [
+        #    (382, 214),
+        #    (320, 74),
+        #    (447, 292),
+        #    (503, 58),
+        #    (610, 279),
+        #    (134, 118),
+        #    (105, 271),
+        #    (657, 133),
+        #    (278, 199),
+        #    (260, 341),
+        #    (539, 161),
+        #    (700, 340)
+        #]
+
+        """Create all the essential components"""
+        coordinates = tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
+        triangulation = bowyer_watson(coordinates, display)
+        edges = tools.unique_edges(triangulation)
+        super_triangle = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2], display)
+
+        minimum_spanning_tree = prims_algorithm(triangulation)
+        removed_edges = tools.find_removed_edges(minimum_spanning_tree, edges)
+        all_edges = minimum_spanning_tree + removed_edges
+
+        dungeon_graph = tools.create_graph(all_edges)
+        rooms = generate_rooms(coordinates, display)
+        hallways = generate_hallways(dungeon_graph, rooms, display)
+
+        """Start by plotting the coordinates"""
+        for node in coordinates:
+            pygame.draw.circle(display, BLUE, node, 4)
 
         pygame.display.flip()
         pygame.time.wait(300)
 
-        t = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2], display)
-        t.plot()
-
-        triangulation = bowyer_watson(coordinates, display)
-        edges = tools.unique_edges(triangulation)
-        minimum_spanning_tree = prims_algorithm(triangulation)
-
+        """Plot the super triangle and the Delaunay triangulation"""
+        super_triangle.plot()
         for triangle in triangulation:
             triangle.plot()
 
-        #pygame.display.flip()
-        #pygame.time.wait(300)
-
+        pygame.display.flip()
+        pygame.time.wait(300)
         display.fill((0, 0, 0))
-        for c in coordinates:
-            pygame.draw.circle(display, BLUE, c, 4)
-            #print(c)
 
+        """Plot the minimum spanning tree"""
+        for node in coordinates:
+            pygame.draw.circle(display, BLUE, node, 4)
         plotting.plot_mst(minimum_spanning_tree, display, GREEN)
-        removed_edges = tools.find_removed_edges(minimum_spanning_tree, edges)
 
-        #pygame.display.flip()
-        #pygame.time.wait(300)
-        all_edges = minimum_spanning_tree
+        pygame.display.flip()
+        pygame.time.wait(300)
+
+        """Plot the removed edges"""
         for edge in removed_edges:
-            all_edges.append(edge)
             pygame.draw.line(display, GREEN, edge[0], edge[1])
 
-        dungeon_graph = tools.create_graph(all_edges)
-        #for key, value in dungeon_graph.items():
-        #    print(f"{key}: {value}")
-        #    for each in value:
-        #        pygame.draw.line(display, RED, key, each[0])
+        pygame.display.flip()
+        pygame.time.wait(300)
 
-        #pygame.display.flip()
-        #pygame.time.wait(300)
+        """Plot the rooms"""
+        for room in rooms:
+            room.plot()
 
-        rooms = generate_rooms(coordinates, display)
+        pygame.display.flip()
+        pygame.time.wait(1000)
+        display.fill((0, 0, 0))
+
+        """Plot the hallways and then plot the rooms on top of them"""
+        plot_hallways(display, hallways, rooms)
         for room in rooms:
             room.plot()
 
         pygame.display.flip()
         pygame.time.wait(3000)
-        display.fill((0, 0, 0))
-
-        hallways = generate_hallways(dungeon_graph, rooms, display)
-        for h in hallways:
-            h.plot()
-            
-        for room in rooms:
-            room.plot()
-
-        pygame.display.flip()
-        pygame.time.wait(10000)
-        break
 
 if __name__ == '__main__':
     dungeon_generator()

@@ -4,6 +4,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
+"""Hard coded edges for testing"""
 tuples = [
     ((491, 173), (674, 166)),
     ((388, 324), (361, 223)),
@@ -22,17 +23,12 @@ def prims_algorithm(triangulation: dict):
     I had to improvise a little in order to get this to work and therefore the code 
     is probably not very readable.
     """
-    #remove all duplicate edges from the triangulation
+    """Remove all duplicate edges from the triangulation and create a graph"""
     tuples = tools.unique_edges(triangulation)
-    #create a graph based on the triangulation
     graph = tools.create_graph(tuples)
 
     minimum_spanning_tree = []
-
-    #starting node is always the first one in the list
     starting_node = list(graph.keys())[0]
-
-    #empty data structure to keep track of the edges we need to examine
     edges = {}
 
     """

@@ -2,7 +2,7 @@ from math import sqrt
 from random import randint
 
 def find_circumcenter(coordinate_list: list):
-    """Find cartesian coordinate_list of a triangle's circumcenter.
+    """Find cartesian coordinates of a triangle's circumcenter.
     I found the formula from this website: https://en.wikipedia.org/wiki/Circumcircle"""
 
     first_x = coordinate_list[0][0]
@@ -29,17 +29,15 @@ def find_circumcenter(coordinate_list: list):
         + (second_x * second_x + second_y * second_y) * (first_x - third_x)
         + (third_x * third_x + third_y * third_y) * (second_x - first_x)
     ) / divider
-    
+
     return round(result_x, 3), round(result_y, 3)
 
-# Calculate the distance between two points
 def distance_between_points(point_a: tuple, point_b: tuple):
     """Calculate the distance between two nodes"""
 
     distance = round(sqrt((point_b[0] - point_a[0]) ** 2 + (point_b[1] - point_a[1]) ** 2), 3)
     return distance
 
-# Generate coordinates in a way to avoid duplicates
 def generate_coordinates(count: int, min_x: int, max_x: int, min_y: int, max_y: int):
     """Generate coordinates for the triangulation"""
 
@@ -85,6 +83,8 @@ def unique_edges(triangles: list):
     return edge_list
 
 def create_graph(edges: list):
+    """This function creates a graph based on some edges. The layout for the graph is
+    basically {nodes coordinates: [neighbors coordinates, distance to neighbor]}"""
     graph = {}
 
     for edge in edges:
@@ -118,6 +118,7 @@ def create_graph(edges: list):
     return graph
 
 def find_minimum_edge(edges: dict):
+    """This function finds the shortest edge from a graph"""
     min_edge = None
     min_weight = 10**10
     for node in edges:
@@ -128,9 +129,12 @@ def find_minimum_edge(edges: dict):
     return min_edge
 
 def find_removed_edges(minimum_spanning_tree: list, edges: list):
-    removed = []
+    """Find the edges of a Delaunay triangulation that were removed
+    by Prim's algorithm"""
+    returning_edges = []
 
     for edge in edges:
+        """If lottery_number equals to less than 87, an edge will be returned"""
         lottery_number = randint(0, 100)
         valid = True
         if edge in minimum_spanning_tree:
@@ -140,6 +144,6 @@ def find_removed_edges(minimum_spanning_tree: list, edges: list):
         if lottery_number < 87:
             valid = False
         if valid:
-            removed.append(edge)
+            returning_edges.append(edge)
 
-    return removed
+    return returning_edges

@@ -36,10 +36,10 @@ class Room:
 
     def __repr__(self):
         return f"Room {self.room_id}, center at {self.room_center}"
-    
+
     def width(self):
         return self.room_width
-    
+
     def height(self):
         return self.room_height
 
@@ -48,12 +48,13 @@ class Room:
 
     def plot(self):
         pygame.draw.polygon(self.display, LIGHTGRAY, [self.top_left, self.top_right, self.bottom_right, self.bottom_left])
-        pygame.draw.line(self.display, GRAY, self.top[0], self.top[1])
-        pygame.draw.line(self.display, GRAY, self.left[0], self.left[1])
-        pygame.draw.line(self.display, GRAY, self.right[0], self.right[1])
-        pygame.draw.line(self.display, GRAY, self.bottom[0], self.bottom[1])
+        pygame.draw.line(self.display, GRAY, self.top[0], self.top[1], width=2)
+        pygame.draw.line(self.display, GRAY, self.left[0], self.left[1], width=2)
+        pygame.draw.line(self.display, GRAY, self.right[0], self.right[1], width=2)
+        pygame.draw.line(self.display, GRAY, self.bottom[0], self.bottom[1], width=2)
 
 def generate_rooms(coordinates: list, display):
+    """Function for generating room objects"""
     room_list = []
 
     for coordinate in coordinates:
@@ -61,10 +62,10 @@ def generate_rooms(coordinates: list, display):
         while not room_added:
 
             if len(room_list) == 0:
-                room_list.append(Room(coordinate, randint(15, 50), randint(15,50), display))
+                room_list.append(Room(coordinate, randint(15, 30), randint(15,50), display))
                 room_added = True
             else:
-                room_height = randint(15, 50)
+                room_height = randint(15, 30)
                 room_width = randint(15, 50)
                 rooms_overlap = False
 
@@ -76,11 +77,12 @@ def generate_rooms(coordinates: list, display):
                     new_room = Room(coordinate, room_height, room_width, display)
                     room_list.append(new_room)
                     room_added = True
-    
+
     return room_list
 
 def in_top_left(room: object, center: tuple, height: int, width: int):
-
+    """A test function I wrote for checking if there's a room on top 
+    of another room's top left corner"""
     if room.room_center[0] < center[0] - width < room.room_center[0] + room.width():
         if room.room_center[1] < center[1] - height < room.room_center[1] + room.height():
             return True
