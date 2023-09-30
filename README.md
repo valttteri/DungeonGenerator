@@ -7,3 +7,5 @@ This is Valtteri Ahola's repository for the course TKT20010. My topic is dungeon
 [Weekly report 2](https://github.com/valttteri/Tiralabra/blob/main/documents/weekly_report2.md)
 
 [Weekly report 3](https://github.com/valttteri/Tiralabra/blob/main/documents/weekly_report3.md)
+
+[Weekly report 4](https://github.com/valttteri/Tiralabra/blob/main/documents/weekly_report4.md)
