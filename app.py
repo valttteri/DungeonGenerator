@@ -1,9 +1,13 @@
 """
-At the moment this program visualises Delaunay triangulation with Bowyer-Watson algorithm.
-The algorithm doesn't work if the the nodes end up forming an approximately straight line.
-In this case it returns an empty list. I don't know if there is a way to fix this problem.
-With larger inputs (about 10+ nodes) the algorithm appears to work 99% of the time.
-The variable "NODE_COUNT" equals to the number of nodes given to the algorithm.
+This program generates a dungeon using Bowyer-Watson's and Prim's algorithms.
+By default the program uses a 800px/400px display where it generates 12 rooms
+connected by hallways. Rooms can't be generated within 100 pixels of each other and
+therefore inputs larger than 15 will most likely cause an infinite loop. 
+
+If you want to see how the algorithm works on larger inputs, comment out lines 55-58 
+in the tools.py file (the 100 pixel rule) and lines 122-123 & 131-132 (room plotting) 
+in this file. Then you can play with the "NODE_COUNT" variable which equals to the 
+number of nodes given to the algorithm.
 """
 
 import sys
@@ -33,6 +37,22 @@ a super triangle later.
 """
 super_coordinates = [(-10, -400), (1500, 300), (-10, 1200)]
 
+"""Hard coded coordinates for testing"""
+        #coordinates = [
+        #    (382, 214),
+        #    (320, 74),
+        #    (447, 292),
+        #    (503, 58),
+        #    (610, 279),
+        #    (134, 118),
+        #    (105, 271),
+        #    (657, 133),
+        #    (278, 199),
+        #    (260, 341),
+        #    (539, 161),
+        #    (700, 340)
+        #]
+
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -54,23 +74,7 @@ def dungeon_generator():
 
         display.fill((0, 0, 0))
 
-        """Hard coded coordinates for testing"""
-        #coordinates = [
-        #    (382, 214),
-        #    (320, 74),
-        #    (447, 292),
-        #    (503, 58),
-        #    (610, 279),
-        #    (134, 118),
-        #    (105, 271),
-        #    (657, 133),
-        #    (278, 199),
-        #    (260, 341),
-        #    (539, 161),
-        #    (700, 340)
-        #]
-
-        """Create all the essential components"""
+        """Create all essential components"""
         coordinates = tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
         triangulation = bowyer_watson(coordinates, display)
         edges = tools.unique_edges(triangulation)
