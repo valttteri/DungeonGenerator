@@ -67,20 +67,20 @@ def generate_coordinates(count: int, width: int, height: int):
 
         if valid:
             coordinate_list.append(candidate)
-
+        #coordinate_list = [(118, 174), (587, 136), (499, 189), (332, 334)]
         if len(coordinate_list) == count:
-            if is_node_alone(coordinate_list, display):
+            if is_node_alone(coordinate_list, count, display):
                 coordinate_list = []
-        
+
     return coordinate_list
 
-def is_node_alone(coordinates: list, display):
+def is_node_alone(coordinates: list, count: int, display):
     """Check if these coordinates will form a valid triangulation"""
     triangulation = bowyer_watson(coordinates, display)
     edges = unique_edges(triangulation)
     graph = create_graph(edges)
 
-    return len(graph) == 0
+    return len(graph) != count
 
 def are_edges_equal(edge_1: list, edge_2: list):
     """Check if two separate edges are equal"""

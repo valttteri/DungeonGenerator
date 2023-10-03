@@ -5,6 +5,7 @@ import tools
 from random import randint
 from classes.triangleclass import Triangle
 from bowyerwatson import bowyer_watson
+from prim import prims_algorithm
 
 class TestTools(unittest.TestCase):
     def setUp(self):
@@ -16,7 +17,7 @@ class TestTools(unittest.TestCase):
         self.Y_MIN = 50
         self.Y_MAX = self.DISPLAY_HEIGHT - 50
 
-        self.coordinates = tools.generate_coordinates(10, self.X_MIN, self.X_MAX, self.Y_MIN, self.Y_MAX)
+        self.coordinates = tools.generate_coordinates(10, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
         self.triangulation = bowyer_watson(self.coordinates, 1)
 
     def tearDown(self):
@@ -93,18 +94,38 @@ class TestTools(unittest.TestCase):
         self.assertTrue(found_correct_edge)
 
 class TestBowyerWatson(unittest.TestCase):
+    """Testing Bowyer-Watson's algorithm"""
+    def setUp(self):
+        self.DISPLAY_WIDTH = 800
+        self.DISPLAY_HEIGHT = 400
+        self.NODE_COUNT = 12
+        self.X_MIN = 100
+        self.X_MAX = self.DISPLAY_WIDTH - 100
+        self.Y_MIN = 50
+        self.Y_MAX = self.DISPLAY_HEIGHT - 50
+
     def test_bowyer_watson(self):
-        triangulation = bowyer_watson([(100, 100), (300, 200), (150, 300)], 1)
-        self.assertEqual(len(triangulation), 1)
-        triangulation = bowyer_watson([(100, 100), (300, 200), (150, 300), (250, 350)], 1)
-        self.assertEqual(len(triangulation), 2)
-        triangulation = bowyer_watson([(100, 100), (300, 200), (150, 300), (250, 350), (400, 125)], 1)
-        self.assertEqual(len(triangulation), 4)
-        triangulation = bowyer_watson([(100, 100), (300, 200), (150, 300), (250, 350), (400, 125), (300, 400)], 1)
-        self.assertEqual(len(triangulation), 6)
-    
+        for i in range(500):
+            valid = True
+            coords = tools.generate_coordinates(4, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
+            triangulation = bowyer_watson(coords, 1)
+            if len(triangulation) == 2 or len(triangulation) == 3:
+                self.assertTrue(valid)
+            else:
+                self.assertFalse(valid)
+
+        for i in range(500):
+            valid = True
+            coords = tools.generate_coordinates(3, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
+            triangulation = bowyer_watson(coords, 1)
+            if len(triangulation) == 1:
+                self.assertTrue(valid)
+            else:
+                self.assertFalse(valid)
+        
+
 class TestTriangle(unittest.TestCase):
-    
+    """Testing the triangle class"""
     def setUp(self):
         self.triangle_1 = Triangle((1, 5), (4, 5), (7, 2), 1)
         self.triangle_2 = Triangle((1, 5), (4, 5), (7, 2), 1)
@@ -152,6 +173,28 @@ class TestTriangle(unittest.TestCase):
         self.assertEqual(self.triangle_3.cc_radius(), 5.261)
         self.assertEqual(self.triangle_4.cc_radius(), 232.857)
         self.assertEqual(self.triangle_5.cc_radius(), 259.233)
+
+class TestPrim(unittest.TestCase):
+    """Testing Bowyer-Watson's algorithm"""
+    def setUp(self):
+        self.DISPLAY_WIDTH = 800
+        self.DISPLAY_HEIGHT = 400
+
+    def test_prim(self):
+        for i in range(500):
+            valid = True
+            count = randint(3, 14)
+
+            coords = tools.generate_coordinates(count, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
+            triangulation = bowyer_watson(coords, 1)
+            mst = prims_algorithm(triangulation)
+            graph = tools.create_graph(mst)
+
+            if len(graph) != count:
+                self.assertFalse(valid)
+            else:
+                self.assertTrue(valid)
+
 
 if __name__ == '__main__':
     unittest.main(testRunner=xmlrunner.XMLTestRunner(output='results'),
