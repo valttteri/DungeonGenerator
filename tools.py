@@ -1,5 +1,8 @@
 from math import sqrt
 from random import randint
+from bowyerwatson import bowyer_watson
+import pygame
+
 
 def find_circumcenter(coordinate_list: list):
     """Find cartesian coordinates of a triangle's circumcenter.
@@ -38,8 +41,13 @@ def distance_between_points(point_a: tuple, point_b: tuple):
     distance = round(sqrt((point_b[0] - point_a[0]) ** 2 + (point_b[1] - point_a[1]) ** 2), 3)
     return distance
 
-def generate_coordinates(count: int, min_x: int, max_x: int, min_y: int, max_y: int):
+def generate_coordinates(count: int, width: int, height: int):
     """Generate coordinates for the triangulation"""
+    min_x = 100
+    max_x = width - 100
+    min_y = 50
+    max_y = height - 50
+    display = pygame.display.set_mode((width, height))
 
     coordinate_list = []
 
@@ -60,7 +68,19 @@ def generate_coordinates(count: int, min_x: int, max_x: int, min_y: int, max_y: 
         if valid:
             coordinate_list.append(candidate)
 
+        if len(coordinate_list) == count:
+            if is_node_alone(coordinate_list, display):
+                coordinate_list = []
+        
     return coordinate_list
+
+def is_node_alone(coordinates: list, display):
+    """Check if these coordinates will form a valid triangulation"""
+    triangulation = bowyer_watson(coordinates, display)
+    edges = unique_edges(triangulation)
+    graph = create_graph(edges)
+
+    return len(graph) == 0
 
 def are_edges_equal(edge_1: list, edge_2: list):
     """Check if two separate edges are equal"""

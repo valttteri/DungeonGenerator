@@ -24,7 +24,7 @@ DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 400
 
 """NODE_COUNT equals to the number of nodes given to the algorithm"""
-NODE_COUNT = 12
+NODE_COUNT = 4
 X_MIN = 100
 X_MAX = DISPLAY_WIDTH - 100
 Y_MIN = 50
@@ -35,7 +35,8 @@ display_center = (DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2)
 Hard coded coordinates for the super triangle. I might add a function for randomly generating
 a super triangle later.
 """
-super_coordinates = [(-10, -400), (1500, 300), (-10, 1200)]
+#super_coordinates = [(-10, -400), (1500, 300), (-10, 1200)]
+super_coordinates = [(-DISPLAY_WIDTH**2, -DISPLAY_HEIGHT**2), (DISPLAY_WIDTH**2, 0), (0, DISPLAY_HEIGHT**2)]
 
 """Hard coded coordinates for testing"""
         #coordinates = [
@@ -75,7 +76,7 @@ def dungeon_generator():
         display.fill((0, 0, 0))
 
         """Create all essential components"""
-        coordinates = tools.generate_coordinates(NODE_COUNT, X_MIN, X_MAX, Y_MIN, Y_MAX)
+        coordinates = tools.generate_coordinates(NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
         triangulation = bowyer_watson(coordinates, display)
         edges = tools.unique_edges(triangulation)
         super_triangle = Triangle(super_coordinates[0], super_coordinates[1], super_coordinates[2], display)
@@ -92,39 +93,39 @@ def dungeon_generator():
         for node in coordinates:
             pygame.draw.circle(display, BLUE, node, 4)
 
-        pygame.display.flip()
-        pygame.time.wait(300)
+        #pygame.display.flip()
+        #pygame.time.wait(300)
 
         """Plot the super triangle and the Delaunay triangulation"""
         super_triangle.plot()
         for triangle in triangulation:
             triangle.plot()
 
-        pygame.display.flip()
-        pygame.time.wait(300)
-        display.fill((0, 0, 0))
+        #pygame.display.flip()
+        #pygame.time.wait(1000)
+        #display.fill((0, 0, 0))
 
         """Plot the minimum spanning tree"""
         for node in coordinates:
             pygame.draw.circle(display, BLUE, node, 4)
         plotting.plot_mst(minimum_spanning_tree, display, GREEN)
 
-        pygame.display.flip()
-        pygame.time.wait(300)
+        #pygame.display.flip()
+        #pygame.time.wait(1000)
 
         """Plot the removed edges"""
         for edge in removed_edges:
             pygame.draw.line(display, GREEN, edge[0], edge[1])
 
-        pygame.display.flip()
-        pygame.time.wait(300)
+        #pygame.display.flip()
+        #pygame.time.wait(300)
 
         """Plot the rooms"""
         for room in rooms:
             room.plot()
 
-        pygame.display.flip()
-        pygame.time.wait(1000)
+        #pygame.display.flip()
+        #pygame.time.wait(300)
         display.fill((0, 0, 0))
 
         """Plot the hallways and then plot the rooms on top of them"""
@@ -133,7 +134,7 @@ def dungeon_generator():
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(3000)
+        pygame.time.wait(10)
 
 if __name__ == '__main__':
     dungeon_generator()
