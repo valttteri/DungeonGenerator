@@ -61,7 +61,7 @@ def generate_coordinates(count: int, width: int, height: int):
 
         if valid:
             for coordinate in coordinate_list:
-                if distance_between_points(candidate, coordinate) < 80:
+                if distance_between_points(candidate, coordinate) < 100:
                     valid = False
 
         if valid:

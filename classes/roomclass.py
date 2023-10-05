@@ -36,6 +36,12 @@ class Room:
 
     def __repr__(self):
         return f"Room {self.room_id}, center at {self.room_center}"
+    
+    def __eq__(self, other):
+        return self.room_id == other.id_number()
+    
+    def id_number(self):
+        return self.room_id
 
     def width(self):
         return self.room_width
@@ -64,8 +70,8 @@ def generate_rooms(coordinates: list, display):
                 room_list.append(Room(coordinate, randint(15, 40), randint(15,50), display))
                 break
 
-            room_height = randint(15, 40)
-            room_width = randint(15, 50)
+            room_height = randint(20, 40)
+            room_width = randint(20, 50)
             valid = True
 
             for room in room_list:
@@ -81,9 +87,11 @@ def generate_rooms(coordinates: list, display):
 def overlaps(room: object, center: tuple, height: int, width: int):
     """Return True if two rooms overlap"""
 
+    #vertical
     if room.center()[0] + room.width() + 10 < center[0] - width or center[0] + width + 10 < room.center()[0] - room.width():
         return False
 
+    #horizontal
     if room.center()[1] + room.height() + 10 < center[1] - height or center[1] + height + 10 < room.center()[1] - room.height():
         return False
 

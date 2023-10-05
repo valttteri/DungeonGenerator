@@ -17,8 +17,8 @@ class Hallway:
         self.end_room = end_room
         self.display = display
         self.hallway_id = next(self.new_id)
-        self.start_node = start_room.center()
-        self.end_node = end_room.center()
+        self.start = start_room.center()
+        self.end = end_room.center()
 
         self.start_room_width = start_room.width()
         self.start_room_height = start_room.height()
@@ -26,6 +26,12 @@ class Hallway:
         self.end_room_width = end_room.width()
         self.end_room_height = end_room.height()
 
+    def start_node(self):
+        return self.start
+    
+    def end_node(self):
+        return self.end
+        
     def __str__(self):
         return f"Hallway between rooms {self.start_room.center()}, and {self.end_room.center()}"
 
@@ -38,8 +44,9 @@ def plot_hallways(display, hallways: list, rooms:list):
     correctly. They shouldnät go through rooms
     """
     for hallway in hallways:
-        start = hallway.start_node
-        end = hallway.end_node
+        start = hallway.start_node()
+        end = hallway.end_node()
+        overlap = False
 
         #plot a horizontal line
         if abs(start[0] - end[0]) < 20:
@@ -49,34 +56,42 @@ def plot_hallways(display, hallways: list, rooms:list):
         if abs(start[1] - end[1]) < 20:
             pygame.draw.line(hallway.display, RED, start, (end[0], start[1]), width=4)
             continue
+        
+        for room in rooms:
+            if room.center() == start or room.center() == end:
+                continue
+            if room_overlap(start, end, room):
+                overlap = True
+                
+        if overlap:
+            pygame.draw.line(display, RED, start, (start[0], end[1]), width=4)
+            pygame.draw.line(display, RED, (start[0], end[1]), end, width=4)
+            continue
+
         pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
         pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
-        #check if there are rooms in the way
-        for room in rooms:
-            pass
-        #    #end in bottom right
-        #    if start[0] < end[0] and start[1] < end[1]:
-        #        right_corner = (end[0], start[1])
-        #        bottom_corner = (start[0], end[1])
 
-        #        if start[0] < room.center()[0] < end[0] and room.center()[1] + room.height() < start[1] < room.center - room.height(): 
-        #            pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
-        #            pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
-        #            continue
-        #        if start[1] < room.center()[1]
+def room_overlap(start_xy: tuple, end_xy: tuple, room: object):
+    """Check if a hallway goes through a room"""
+    #horizontal
+    if (room.center()[1] - room.height() < start_xy[1] < room.center()[1] + room.height()
+        and room.center()[0] + room.width() > start_xy[0]
+        and room.center()[0] - room.width() < end_xy[0]
+        or room.center()[0] - room.width() < end_xy[0]
+        and room.center()[0] + room.width() > start_xy[0]
+    ):
+        return True
 
-            #end in bottom right
-            #if start[0] > end[0] and start[1] < end[1]:
-            #    corner_point = (end[0], start[1])
+    #vertical
+    if (room.center()[0] + room.width() > end_xy[0] > room.center()[0] - room.width()
+        and room.center()[1] + room.height() > start_xy[1]
+        and room.center()[1] - room.height() < end_xy[1]
+        or room.center()[1] - room.height() < end_xy[1]
+        and room.center()[1] + room.height() > start_xy[1] 
+    ):
+        return True
 
-            #room in top left
-            #if start[0] < end[0] and start[0] < end[0]:
-            #    corner_point = (end[0], start[1])
-
-            #room in top right
-            #if start[0] < end[0] and start[0] < end[0]:
-            #    corner_point = (end[0], start[1])
-
+    return False
 
 def generate_hallways(graph: dict, rooms: list, display):
     """Function for generating hallway objects"""
@@ -106,6 +121,6 @@ def find_hallways_rooms(start_node, end_node, rooms):
         elif room.center() == end_node:
             ending_room = room
 
-    if starting_room != None != ending_room:
+    if starting_room is not None is not ending_room:
         return starting_room, ending_room
     return f"no hallway found between nodes {start_node} and {end_node}"
