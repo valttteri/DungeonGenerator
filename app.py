@@ -4,10 +4,8 @@ By default the program uses a 800px/400px display where it generates 12 rooms
 connected by hallways. Rooms can't be generated within 100 pixels of each other and
 therefore inputs larger than 15 will most likely cause an infinite loop. 
 
-If you want to see how the algorithm works on larger inputs, comment out lines 55-58 
-in the tools.py file (the 100 pixel rule) and lines 122-123 & 131-132 (room plotting) 
-in this file. Then you can play with the "NODE_COUNT" variable which equals to the 
-number of nodes given to the algorithm.
+If you want to see how the program works with other inputs, you can change the variables
+DISPLAY_WIDTH, DISPLAY_HEIGHT and NODE_COUNT.
 """
 
 import sys
@@ -19,6 +17,7 @@ import plotting
 from classes.triangleclass import Triangle
 from classes.roomclass import generate_rooms
 from classes.hallwayclass import generate_hallways, plot_hallways
+
 
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 400
@@ -129,7 +128,7 @@ def dungeon_generator():
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(300)
+        pygame.time.wait(1000)
 
 if __name__ == '__main__':
     dungeon_generator()
