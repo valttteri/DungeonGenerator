@@ -14,7 +14,6 @@ from prim import prims_algorithm
 from bowyerwatson import bowyer_watson
 import tools
 import plotting
-from classes.triangleclass import Triangle
 from classes.roomclass import generate_rooms
 from classes.hallwayclass import generate_hallways, plot_hallways
 
