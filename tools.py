@@ -5,8 +5,7 @@ import pygame
 
 
 def find_circumcenter(coordinate_list: list):
-    """Find cartesian coordinates of a triangle's circumcenter.
-    I found the formula from this website: https://en.wikipedia.org/wiki/Circumcircle"""
+    """Find cartesian coordinates of a triangle's circumcenter."""
 
     first_x = coordinate_list[0][0]
     first_y = coordinate_list[0][1]
@@ -62,12 +61,11 @@ def generate_coordinates(count: int, width: int, height: int):
 
         if valid:
             for coordinate in coordinate_list:
-                if distance_between_points(candidate, coordinate) < 100:
+                if distance_between_points(candidate, coordinate) < 80:
                     valid = False
 
         if valid:
             coordinate_list.append(candidate)
-        #coordinate_list = [(118, 174), (587, 136), (499, 189), (332, 334)]
         if len(coordinate_list) == count:
             if is_node_alone(coordinate_list, count, display):
                 coordinate_list = []

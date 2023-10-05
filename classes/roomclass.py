@@ -58,32 +58,33 @@ def generate_rooms(coordinates: list, display):
     room_list = []
 
     for coordinate in coordinates:
-        room_added = False
-        while not room_added:
+        while True:
 
             if len(room_list) == 0:
-                room_list.append(Room(coordinate, randint(15, 30), randint(15,50), display))
-                room_added = True
-            else:
-                room_height = randint(15, 30)
-                room_width = randint(15, 50)
-                rooms_overlap = False
+                room_list.append(Room(coordinate, randint(15, 40), randint(15,50), display))
+                break
 
-                for room in room_list:
-                    if in_top_left(room, coordinate, room_height, room_width):
-                        rooms_overlap = True
+            room_height = randint(15, 40)
+            room_width = randint(15, 50)
+            valid = True
 
-                if not rooms_overlap:
-                    new_room = Room(coordinate, room_height, room_width, display)
-                    room_list.append(new_room)
-                    room_added = True
+            for room in room_list:
+                if overlaps(room, coordinate, room_height, room_width):
+                    valid = False
+            if valid:
+                new_room = Room(coordinate, room_height, room_width, display)
+                room_list.append(new_room)
+                break
 
     return room_list
 
-def in_top_left(room: object, center: tuple, height: int, width: int):
-    """A test function I wrote for checking if there's a room on top 
-    of another room's top left corner"""
-    if room.room_center[0] < center[0] - width < room.room_center[0] + room.width():
-        if room.room_center[1] < center[1] - height < room.room_center[1] + room.height():
-            return True
-    return False
+def overlaps(room: object, center: tuple, height: int, width: int):
+    """Return True if two rooms overlap"""
+
+    if room.center()[0] + room.width() + 10 < center[0] - width or center[0] + width + 10 < room.center()[0] - room.width():
+        return False
+
+    if room.center()[1] + room.height() + 10 < center[1] - height or center[1] + height + 10 < room.center()[1] - room.height():
+        return False
+
+    return True

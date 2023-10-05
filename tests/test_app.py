@@ -53,7 +53,7 @@ class TestTools(unittest.TestCase):
             for other in self.coordinates:
                 if coordinate == other:
                     continue
-                if tools.distance_between_points(coordinate, other) < 100:
+                if tools.distance_between_points(coordinate, other) < 80:
                     not_near_each_other = False
         if len(self.coordinates) != 10:
             enough_coordinates = False

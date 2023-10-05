@@ -1,11 +1,11 @@
 """
 This program generates a dungeon using Bowyer-Watson's and Prim's algorithms.
-By default the program uses a 800px/400px display where it generates 12 rooms
-connected by hallways. Rooms can't be generated within 100 pixels of each other and
-therefore inputs larger than 15 will most likely cause an infinite loop. 
+By default the program uses a 900px/500px display where it generates 12 rooms
+connected by hallways. Rooms can't be generated within 80 pixels of each other and
+therefore large inputs will cause an infinite loop. 
 
 If you want to see how the program works with other inputs, you can change the variables
-DISPLAY_WIDTH, DISPLAY_HEIGHT and NODE_COUNT.
+DISPLAY_WIDTH, DISPLAY_HEIGHT and NODE_COUNT.  
 """
 
 import sys
@@ -19,8 +19,8 @@ from classes.roomclass import generate_rooms
 from classes.hallwayclass import generate_hallways, plot_hallways
 
 
-DISPLAY_WIDTH = 800
-DISPLAY_HEIGHT = 400
+DISPLAY_WIDTH = 900
+DISPLAY_HEIGHT = 500
 
 """NODE_COUNT equals to the number of nodes given to the algorithm"""
 NODE_COUNT = 12
@@ -87,39 +87,36 @@ def dungeon_generator():
         for node in coordinates:
             pygame.draw.circle(display, BLUE, node, 4)
 
-        #pygame.display.flip()
-        #pygame.time.wait(300)
+        pygame.display.flip()
+        pygame.time.wait(500)
 
         """Plot the super triangle and the Delaunay triangulation"""
         super_triangle.plot()
         for triangle in triangulation:
             triangle.plot()
 
-        #pygame.display.flip()
-        #pygame.time.wait(1000)
-        #display.fill((0, 0, 0))
+        pygame.display.flip()
+        pygame.time.wait(500)
+        display.fill((0, 0, 0))
 
         """Plot the minimum spanning tree"""
         for node in coordinates:
             pygame.draw.circle(display, BLUE, node, 4)
         plotting.plot_mst(minimum_spanning_tree, display, GREEN)
 
-        #pygame.display.flip()
-        #pygame.time.wait(1000)
+        pygame.display.flip()
+        pygame.time.wait(500)
 
         """Plot the removed edges"""
         for edge in removed_edges:
             pygame.draw.line(display, GREEN, edge[0], edge[1])
-
-        #pygame.display.flip()
-        #pygame.time.wait(300)
 
         """Plot the rooms"""
         for room in rooms:
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(1000)
+        pygame.time.wait(500)
         display.fill((0, 0, 0))
 
         """Plot the hallways and then plot the rooms on top of them"""
@@ -128,7 +125,7 @@ def dungeon_generator():
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(1000)
+        pygame.time.wait(500)
 
 if __name__ == '__main__':
     dungeon_generator()
