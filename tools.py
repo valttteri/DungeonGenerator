@@ -3,6 +3,10 @@ from random import randint
 from bowyerwatson import bowyer_watson
 import pygame
 
+DISPLAY_WIDTH = 900
+DISPLAY_HEIGHT = 500
+
+super_coordinates = [(-DISPLAY_WIDTH**2, -DISPLAY_HEIGHT**2), (DISPLAY_WIDTH**2, 0), (0, DISPLAY_HEIGHT**2)]
 
 def find_circumcenter(coordinate_list: list):
     """Find cartesian coordinates of a triangle's circumcenter."""
@@ -74,7 +78,7 @@ def generate_coordinates(count: int, width: int, height: int):
 
 def is_node_alone(coordinates: list, count: int, display):
     """Check if these coordinates will form a valid triangulation"""
-    triangulation = bowyer_watson(coordinates, display)
+    triangulation = bowyer_watson(coordinates, super_coordinates, display)
     edges = unique_edges(triangulation)
     graph = create_graph(edges)
 

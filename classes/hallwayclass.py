@@ -1,4 +1,5 @@
 import itertools
+from random import randint
 import pygame
 
 GREEN = (0, 255, 0)
@@ -26,11 +27,26 @@ class Hallway:
         self.end_room_width = end_room.width()
         self.end_room_height = end_room.height()
 
+    def midpoint(self):
+        return ((self.start[0]+self.end[0])//2, (self.start[1]+self.end[1])//2)
+
     def start_node(self):
         return self.start
     
     def end_node(self):
         return self.end
+    
+    def start_width(self):
+        return self.start_room_width
+    
+    def start_height(self):
+        return self.start_room_height
+    
+    def end_width(self):
+        return self.end_room_width
+    
+    def end_height(self):
+        return self.end_room_height
         
     def __str__(self):
         return f"Hallway between rooms {self.start_room.center()}, and {self.end_room.center()}"
@@ -46,6 +62,72 @@ def plot_hallways(display, hallways: list, rooms:list):
     for hallway in hallways:
         start = hallway.start_node()
         end = hallway.end_node()
+        start_width = hallway.start_width()
+        start_height = hallway.start_height()
+        end_width = hallway.end_width()
+        end_height = hallway.end_height()
+        midpoint = hallway.midpoint()
+        overlap = False
+
+        #plot a vertical hallway
+        if (
+        start[0] - start_width < midpoint[0] < start[0] + start_width
+        and end[0] - end_width < midpoint[0] < end[0] + end_width
+        ):  
+            common_range = [max(start[0]-start_width, end[0]-end_width), min(start[0]+start_width, end[0]+end_width)]
+            
+            if len(common_range) > 20:
+                x_coordinate = randint(common_range[0]+5, common_range[1]-5)
+            else:
+                x_coordinate = (common_range[0] + common_range[1])//2
+
+            pygame.draw.line(display, RED, (x_coordinate, start[1]), (x_coordinate, end[1]), width=4)
+            continue
+
+        #plot a horizontal hallway
+        if (
+            start[1] - start_height < midpoint[1] < start[1] + start_height
+            and end[1] - end_height < midpoint[1] < end[1] + end_height
+        ):
+            common_range = [max(start[1]-start_height, end[1]-end_height), min(start[1]+start_height, end[1]+end_height)]
+            
+            if len(common_range) > 20:
+                y_coordinate = randint(common_range[0]+5, common_range[1]-5)
+            else:
+                y_coordinate = (common_range[0] + common_range[1])//2
+        
+            pygame.draw.line(hallway.display, RED, (start[0], y_coordinate), (end[0], y_coordinate), width=4)
+            continue
+        
+        #plot an L-shaped hallway
+        for room in rooms:
+            if room.center() == start or room.center() == end:
+                continue
+            if room_overlap(start, end, room):
+                overlap = True
+                
+        if overlap:
+            pygame.draw.line(display, RED, start, (start[0], end[1]), width=4)
+            pygame.draw.line(display, RED, (start[0], end[1]), end, width=4)
+            continue
+
+        pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
+        pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
+
+
+"""
+def plot_hallways(display, hallways: list, rooms:list):
+    Function for plotting the hallways. Right now I'm working on plotting the L-shaped hallways
+    correctly. They shouldnät go through rooms
+
+    for hallway in hallways:
+        start = hallway.start_node()
+        end = hallway.end_node()
+        start_width = hallway.start_width()
+        start_height = hallway.start_height()
+        end_width = hallway.end_width()
+        end_height = hallway.end_height()
+        midpoint = hallway.midpoint()
         overlap = False
 
         #plot a horizontal line
@@ -53,6 +135,7 @@ def plot_hallways(display, hallways: list, rooms:list):
             pygame.draw.line(display, RED, start, (start[0], end[1]), width=4)
             continue
         #plot a vertical line
+        
         if abs(start[1] - end[1]) < 20:
             pygame.draw.line(hallway.display, RED, start, (end[0], start[1]), width=4)
             continue
@@ -70,7 +153,8 @@ def plot_hallways(display, hallways: list, rooms:list):
 
         pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
         pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
-
+"""
+        
 def room_overlap(start_xy: tuple, end_xy: tuple, room: object):
     """Check if a hallway goes through a room"""
     #horizontal

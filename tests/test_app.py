@@ -16,9 +16,14 @@ class TestTools(unittest.TestCase):
         self.X_MAX = self.DISPLAY_WIDTH - 100
         self.Y_MIN = 50
         self.Y_MAX = self.DISPLAY_HEIGHT - 50
+        self.super_coordinates = [
+            (-self.DISPLAY_WIDTH**2, -self.DISPLAY_HEIGHT**2),
+            (self.DISPLAY_WIDTH**2, 0), (0, self.DISPLAY_HEIGHT**2)
+        ]
+
 
         self.coordinates = tools.generate_coordinates(10, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
-        self.triangulation = bowyer_watson(self.coordinates, 1)
+        self.triangulation = bowyer_watson(self.coordinates, self.super_coordinates, 1)
 
     def tearDown(self):
         del self.coordinates
@@ -103,12 +108,17 @@ class TestBowyerWatson(unittest.TestCase):
         self.X_MAX = self.DISPLAY_WIDTH - 100
         self.Y_MIN = 50
         self.Y_MAX = self.DISPLAY_HEIGHT - 50
+        self.super_coordinates = [
+            (-self.DISPLAY_WIDTH**2, -self.DISPLAY_HEIGHT**2),
+            (self.DISPLAY_WIDTH**2, 0), (0, self.DISPLAY_HEIGHT**2)
+        ]
+        
 
     def test_bowyer_watson(self):
         for i in range(500):
             valid = True
             coords = tools.generate_coordinates(4, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
-            triangulation = bowyer_watson(coords, 1)
+            triangulation = bowyer_watson(coords, self.super_coordinates, 1)
             if len(triangulation) == 2 or len(triangulation) == 3:
                 self.assertTrue(valid)
             else:
@@ -117,7 +127,7 @@ class TestBowyerWatson(unittest.TestCase):
         for i in range(500):
             valid = True
             coords = tools.generate_coordinates(3, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
-            triangulation = bowyer_watson(coords, 1)
+            triangulation = bowyer_watson(coords, self.super_coordinates, 1)
             if len(triangulation) == 1:
                 self.assertTrue(valid)
             else:
@@ -179,6 +189,10 @@ class TestPrim(unittest.TestCase):
     def setUp(self):
         self.DISPLAY_WIDTH = 800
         self.DISPLAY_HEIGHT = 400
+        self.super_coordinates = [
+            (-self.DISPLAY_WIDTH**2, -self.DISPLAY_HEIGHT**2),
+            (self.DISPLAY_WIDTH**2, 0), (0, self.DISPLAY_HEIGHT**2)
+        ]
 
     def test_prim(self):
         for i in range(500):
@@ -186,7 +200,7 @@ class TestPrim(unittest.TestCase):
             count = randint(3, 14)
 
             coords = tools.generate_coordinates(count, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
-            triangulation = bowyer_watson(coords, 1)
+            triangulation = bowyer_watson(coords, self.super_coordinates, 1)
             mst = prims_algorithm(triangulation)
             graph = tools.create_graph(mst)
 
