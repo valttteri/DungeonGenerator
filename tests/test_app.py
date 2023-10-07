@@ -1,6 +1,5 @@
 import unittest
 import xmlrunner
-import app
 import tools
 from random import randint
 from classes.triangleclass import Triangle
@@ -133,9 +132,7 @@ class TestBowyerWatson(unittest.TestCase):
             else:
                 self.assertFalse(valid)
         
-
 class TestTriangle(unittest.TestCase):
-    """Testing the triangle class"""
     def setUp(self):
         self.triangle_1 = Triangle((1, 5), (4, 5), (7, 2), 1)
         self.triangle_2 = Triangle((1, 5), (4, 5), (7, 2), 1)
@@ -187,8 +184,8 @@ class TestTriangle(unittest.TestCase):
 class TestPrim(unittest.TestCase):
     """Testing Bowyer-Watson's algorithm"""
     def setUp(self):
-        self.DISPLAY_WIDTH = 800
-        self.DISPLAY_HEIGHT = 400
+        self.DISPLAY_WIDTH = 900
+        self.DISPLAY_HEIGHT = 500
         self.super_coordinates = [
             (-self.DISPLAY_WIDTH**2, -self.DISPLAY_HEIGHT**2),
             (self.DISPLAY_WIDTH**2, 0), (0, self.DISPLAY_HEIGHT**2)
@@ -197,7 +194,7 @@ class TestPrim(unittest.TestCase):
     def test_prim(self):
         for i in range(500):
             valid = True
-            count = randint(3, 14)
+            count = randint(3, 15)
 
             coords = tools.generate_coordinates(count, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
             triangulation = bowyer_watson(coords, self.super_coordinates, 1)
