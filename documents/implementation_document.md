@@ -3,9 +3,10 @@
 #### General structure
 
 My project consists of three main parts: app.py file which runs the program, algorithm implementations and helpful tools.
-When the program starts running it gives Bowyer-Watson's algorithm a bunch of coordinates that get turned into a Delaunay's
-triangulation. Then Prim's algorithm turns it into a minimum spanning tree and finally rooms and hallways are generated.
-In the tools.py file there are functions used by other parts of the program.
+The height and width of the dungeon and the number of rooms to be generated are given to the program by user. If the 
+input is invalid the user gets notified and has to give another input. Once a valid input is given, the program gives
+Bowyer-Watson's algorithm a bunch of coordinates that get turned into a Delaunay's triangulation. Then Prim's algorithm 
+turns it into a minimum spanning tree and finally rooms and hallways are generated.
 
 #### Achieved time and space requirements
 
@@ -13,9 +14,7 @@ My implementations of Bowyer-Watson's and Prim's algorithms both run in O(n<sup>
 
 #### Shortcomings and suggestions for improvement
 
-Two biggest problems at the moment are rooms generating on top of each other and hallways generating on top of rooms.
-Also the program is optimized for a fixed sized display. Other sizes might not work at all. The super triangle used by
-Bowyer-Watson's algorithm could be modified to use randomly generated coordinates. 
+The biggest problem right now is hallways going through rooms. 
 
 #### Usage of chatbots
 
