@@ -64,6 +64,7 @@ def generate_rooms(coordinates: list, display):
     room_list = []
 
     for coordinate in coordinates:
+        counter = 0
         while True:
 
             if len(room_list) == 0:
@@ -81,6 +82,9 @@ def generate_rooms(coordinates: list, display):
                 new_room = Room(coordinate, room_height, room_width, display)
                 room_list.append(new_room)
                 break
+            counter += 1
+            if counter > 100:
+                return 1
 
     return room_list
 

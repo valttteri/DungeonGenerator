@@ -3,9 +3,7 @@ This program generates a dungeon using Bowyer-Watson's and Prim's algorithms.
 By default the program uses a 900px/500px display where it generates 12 rooms
 connected by hallways. Rooms can't be generated within 80 pixels of each other and
 therefore large inputs will cause an infinite loop. 
-
-If you want to see how the program works with other inputs, you can change the variables
-DISPLAY_WIDTH, DISPLAY_HEIGHT and NODE_COUNT.  
+ 
 """
 
 from ctypes import WinDLL, wintypes
@@ -18,20 +16,6 @@ import plotting
 from classes.roomclass import generate_rooms
 from classes.hallwayclass import generate_hallways, plot_hallways
 
-
-DISPLAY_WIDTH = 900
-DISPLAY_HEIGHT = 500
-
-"""NODE_COUNT equals to the number of nodes given to the algorithm"""
-NODE_COUNT = 15
-X_MIN = 100
-X_MAX = DISPLAY_WIDTH - 100
-Y_MIN = 50
-Y_MAX = DISPLAY_HEIGHT - 50
-display_center = (DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2)
-super_coordinates = [(-DISPLAY_WIDTH**2, -DISPLAY_HEIGHT**2), (DISPLAY_WIDTH**2, 0), (0, DISPLAY_HEIGHT**2)]
-
-
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -39,24 +23,41 @@ WHITE = (255, 255, 255)
 LIGHTGRAY = (211, 211, 211)
 GRAY = (128, 128, 128)
 
-"""Visualising with pygame"""
-
 def main():
+    print("Welcome to the dungeon generator!")
+    print("First let's define the size of the dungeon")
+    print("Recommendation: width 900px, height 500px, rooms 3-20")
+    print("")
     while True:
-        print("Welcome to the dungeon!")
 
-        user_input = input("Generate a dungeon? (y/n)")
+        width = int(input("Choose a width of at least 400: "))
 
-        if user_input not in ["y", "n"]:
+        if width < 400:
+            print(f"{width} is too narrow")
             continue
-        if user_input == "y":
-            print("Press R key to generate a new dungeon")
-            print("Press Q to quit")
-            dungeon_generator()
-        if user_input == "n":
-            break
 
-def dungeon_generator():
+        height = int(input("Choose a height of at least 300: "))
+
+        if height < 300:
+            print(f"{height} is too low")
+            continue
+
+        nodes = int(input("Choose how many rooms - at least 3: "))
+
+        if nodes < 3:
+            print(f"{nodes} is not enough")
+            continue
+
+        print("")
+        print("Press 1 to generate a new dungeon")
+        print("Press 2 to give a new input")
+        print("Press 3 to quit")
+        
+        program = dungeon_generator(nodes, width, height)
+        if program == 1:
+            continue
+
+def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
     pygame.init()
     display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
     pygame.display.set_caption("Welcome to the Dungeon")
@@ -68,7 +69,16 @@ def dungeon_generator():
     display.fill((0, 0, 0))
 
     """Create all essential components"""
+    super_coordinates = [(-DISPLAY_WIDTH**2, -DISPLAY_HEIGHT**2), (DISPLAY_WIDTH**2, 0), (0, DISPLAY_HEIGHT**2)]
     coordinates = tools.generate_coordinates(NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+
+    if coordinates == 1:
+        print("")
+        print("Couldn't find a spot for each room")
+        print("Reduce the amount of rooms or increase the display size")
+        print("")
+        return 1
+
     triangulation = bowyer_watson(coordinates, super_coordinates, display)
     edges = tools.unique_edges(triangulation)
 
@@ -78,6 +88,14 @@ def dungeon_generator():
 
     dungeon_graph = tools.create_graph(all_edges)
     rooms = generate_rooms(coordinates, display)
+
+    if rooms == 1:
+        print("")
+        print("Couldn't find a spot for each room")
+        print("Reduce the amount of rooms or increase the display size")
+        print("")
+        return 1
+
     hallways = generate_hallways(dungeon_graph, rooms, display)
 
     """Start by plotting the coordinates"""
@@ -123,9 +141,11 @@ def dungeon_generator():
             if action.type == pygame.QUIT:
                 sys.exit()
             if action.type == pygame.KEYDOWN:
-                if action.key == pygame.K_r:
-                    dungeon_generator()
-                if action.key == pygame.K_q:
+                if action.key == pygame.K_1:
+                    dungeon_generator(NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+                if action.key == pygame.K_2:
+                    main()
+                if action.key == pygame.K_3:
                     sys.exit()
 
         """Plot the hallways and then plot the rooms on top of them"""

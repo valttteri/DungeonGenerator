@@ -53,7 +53,7 @@ def generate_coordinates(count: int, width: int, height: int):
     display = pygame.display.set_mode((width, height))
 
     coordinate_list = []
-
+    counter = 0
     while len(coordinate_list) < count:
         valid = True
         x_coordinate = randint(min_x, max_x)
@@ -73,6 +73,9 @@ def generate_coordinates(count: int, width: int, height: int):
         if len(coordinate_list) == count:
             if is_node_alone(coordinate_list, count, display):
                 coordinate_list = []
+        counter += 1
+        if counter > 1000:
+            return 1
 
     return coordinate_list
 
