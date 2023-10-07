@@ -8,6 +8,7 @@ If you want to see how the program works with other inputs, you can change the v
 DISPLAY_WIDTH, DISPLAY_HEIGHT and NODE_COUNT.  
 """
 
+from ctypes import WinDLL, wintypes
 import sys
 import pygame
 from prim import prims_algorithm
@@ -22,7 +23,7 @@ DISPLAY_WIDTH = 900
 DISPLAY_HEIGHT = 500
 
 """NODE_COUNT equals to the number of nodes given to the algorithm"""
-NODE_COUNT = 12
+NODE_COUNT = 15
 X_MIN = 100
 X_MAX = DISPLAY_WIDTH - 100
 Y_MIN = 50
@@ -42,11 +43,15 @@ GRAY = (128, 128, 128)
 
 def main():
     while True:
+        print("Welcome to the dungeon!")
+
         user_input = input("Generate a dungeon? (y/n)")
 
         if user_input not in ["y", "n"]:
             continue
         if user_input == "y":
+            print("Press R key to generate a new dungeon")
+            print("Press Q to quit")
             dungeon_generator()
         if user_input == "n":
             break
@@ -56,6 +61,9 @@ def dungeon_generator():
     display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
     pygame.display.set_caption("Welcome to the Dungeon")
     clock = pygame.time.Clock()
+
+    """The following forces the pygame window on top"""
+    pin_window()
 
     display.fill((0, 0, 0))
 
@@ -114,6 +122,11 @@ def dungeon_generator():
         for action in pygame.event.get():
             if action.type == pygame.QUIT:
                 sys.exit()
+            if action.type == pygame.KEYDOWN:
+                if action.key == pygame.K_r:
+                    dungeon_generator()
+                if action.key == pygame.K_q:
+                    sys.exit()
 
         """Plot the hallways and then plot the rooms on top of them"""
         plot_hallways(display, hallways, rooms)
@@ -121,6 +134,21 @@ def dungeon_generator():
             room.plot()
         pygame.display.flip()
         clock.tick(10)
+
+def pin_window():
+    window = pygame.display.get_wm_info()['window']
+    user32 = WinDLL("user32")
+    user32.SetWindowPos.restype = wintypes.HWND
+    user32.SetWindowPos.argtypes = [
+        wintypes.HWND,
+        wintypes.HWND,
+        wintypes.INT,
+        wintypes.INT,
+        wintypes.INT,
+        wintypes.INT,
+        wintypes.UINT
+    ]
+    user32.SetWindowPos(window, -1, 50, 50, 0, 0, 0x0001)
 
 if __name__ == '__main__':
     main()
