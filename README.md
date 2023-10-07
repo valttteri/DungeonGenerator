@@ -10,3 +10,5 @@ In order to test the program, clone the repo and run file app.py. There are inst
 [Weekly report 3](https://github.com/valttteri/Tiralabra/blob/main/documents/weekly_report3.md)
 
 [Weekly report 4](https://github.com/valttteri/Tiralabra/blob/main/documents/weekly_report4.md)
+
+[Weekly report 5](https://github.com/valttteri/Tiralabra/blob/main/documents/weekly_report5.md)
