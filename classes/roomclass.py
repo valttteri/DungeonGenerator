@@ -54,10 +54,10 @@ class Room:
 
     def plot(self):
         pygame.draw.polygon(self.display, LIGHTGRAY, [self.top_left, self.top_right, self.bottom_right, self.bottom_left])
-        pygame.draw.line(self.display, GRAY, self.top[0], self.top[1], width=2)
-        pygame.draw.line(self.display, GRAY, self.left[0], self.left[1], width=2)
-        pygame.draw.line(self.display, GRAY, self.right[0], self.right[1], width=2)
-        pygame.draw.line(self.display, GRAY, self.bottom[0], self.bottom[1], width=2)
+        pygame.draw.line(self.display, GRAY, self.top[0], self.top[1], width=3)
+        pygame.draw.line(self.display, GRAY, self.left[0], self.left[1], width=3)
+        pygame.draw.line(self.display, GRAY, self.right[0], self.right[1], width=3)
+        pygame.draw.line(self.display, GRAY, self.bottom[0], self.bottom[1], width=3)
 
 def generate_rooms(coordinates: list, display):
     """Function for generating room objects"""

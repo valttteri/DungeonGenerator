@@ -4,5 +4,6 @@ __pycache__/
 .coverage
 htmlcov/
 #python -m coverage run -m unittest tests\\test_app.py
-#python -m coverate report
+#python -m coverage run -m unittest discover tests
+#python -m coverage report
 #python -m coverage html

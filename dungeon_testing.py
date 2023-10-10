@@ -120,16 +120,16 @@ def testing_generator():
         display.fill((0, 0, 0))
 
         """Plot the hallways and then plot the rooms on top of them"""
-        overlap = plot_hallways(display, hallways, rooms)
+        plot_hallways(display, hallways, rooms)
         for room in rooms:
             room.plot()
 
-        if overlap:
-            pygame.display.flip()
-            pygame.time.wait(6000)
-        else:
-            pygame.display.flip()
-            pygame.time.wait(10)
+        #if horiz_change or vert_change:
+        #    pygame.display.flip()
+        #    pygame.time.wait(3000)
+        #else:
+        pygame.display.flip()
+        pygame.time.wait(1000)
 
 if __name__ == '__main__':
     testing_generator()

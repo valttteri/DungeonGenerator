@@ -105,14 +105,14 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
         pygame.draw.circle(display, BLUE, node, 4)
 
     pygame.display.flip()
-    pygame.time.wait(500)
+    pygame.time.wait(1000)
 
     """Plot Delaunay triangulation"""
     for triangle in triangulation:
         triangle.plot()
 
     pygame.display.flip()
-    pygame.time.wait(500)
+    pygame.time.wait(1000)
     display.fill((0, 0, 0))
 
     """Plot the minimum spanning tree"""
@@ -121,22 +121,26 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
     plotting.plot_mst(minimum_spanning_tree, display, GREEN)
 
     pygame.display.flip()
-    pygame.time.wait(500)
+    pygame.time.wait(1000)
 
     """Plot the removed edges"""
-    for edge in removed_edges:
-        pygame.draw.line(display, GREEN, edge[0], edge[1])
+    if len(removed_edges) != 0:
+        for edge in removed_edges:
+            pygame.draw.line(display, GREEN, edge[0], edge[1])
 
-    pygame.display.flip()
-    pygame.time.wait(500)
+        pygame.display.flip()
+        pygame.time.wait(1000)
 
     """Plot the rooms"""
     for room in rooms:
         room.plot()
 
     pygame.display.flip()
-    pygame.time.wait(500)
+    pygame.time.wait(1000)
     display.fill((0, 0, 0))
+
+    """Plot the hallways"""
+    plot_hallways(display, hallways, rooms)
 
     while True:
         for action in pygame.event.get():
@@ -151,7 +155,6 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
                     sys.exit()
 
         """Plot the hallways and then plot the rooms on top of them"""
-        plot_hallways(display, hallways, rooms)
         for room in rooms:
             room.plot()
         pygame.display.flip()
