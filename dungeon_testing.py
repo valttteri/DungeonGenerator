@@ -10,9 +10,9 @@ from classes.roomclass import generate_rooms
 from classes.hallwayclass import generate_hallways, plot_hallways
 
 DISPLAY_WIDTH = 900
-DISPLAY_HEIGHT = 500
+DISPLAY_HEIGHT = 600
 """NODE_COUNT equals to the number of nodes given to the algorithm"""
-NODE_COUNT = 4
+NODE_COUNT = 22
 X_MIN = 100
 X_MAX = DISPLAY_WIDTH - 100
 Y_MIN = 50
@@ -120,12 +120,16 @@ def testing_generator():
         display.fill((0, 0, 0))
 
         """Plot the hallways and then plot the rooms on top of them"""
-        plot_hallways(display, hallways, rooms)
+        overlap = plot_hallways(display, hallways, rooms)
         for room in rooms:
             room.plot()
 
-        pygame.display.flip()
-        pygame.time.wait(10)
+        if overlap:
+            pygame.display.flip()
+            pygame.time.wait(6000)
+        else:
+            pygame.display.flip()
+            pygame.time.wait(10)
 
 if __name__ == '__main__':
     testing_generator()

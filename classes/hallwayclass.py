@@ -32,22 +32,22 @@ class Hallway:
 
     def start_node(self):
         return self.start
-    
+
     def end_node(self):
         return self.end
-    
+
     def start_width(self):
         return self.start_room_width
-    
+
     def start_height(self):
         return self.start_room_height
-    
+
     def end_width(self):
         return self.end_room_width
-    
+
     def end_height(self):
         return self.end_room_height
-        
+
     def __str__(self):
         return f"Hallway between rooms {self.start_room.center()}, and {self.end_room.center()}"
 
@@ -56,7 +56,7 @@ class Hallway:
 
 def plot_hallways(display, hallways: list, rooms:list):
     """Function for plotting the hallways"""
-    
+    overlap = False
     for hallway in hallways:
         start = hallway.start_node()
         end = hallway.end_node()
@@ -65,7 +65,6 @@ def plot_hallways(display, hallways: list, rooms:list):
         end_width = hallway.end_width()
         end_height = hallway.end_height()
         midpoint = hallway.midpoint()
-        overlap = False
 
         #plot a vertical hallway
         if (
@@ -106,39 +105,53 @@ def plot_hallways(display, hallways: list, rooms:list):
             continue
         
         #plot an L-shaped hallway
+        plotted = False
         for room in rooms:
+            if plotted:
+                continue
             if room.center() == start or room.center() == end:
                 continue
             if room_overlap(start, end, room):
+                """
+                If there's a room on the way, the hallway is plotted on the opposite side.
+                In a very unlucky case that might also lead to overlapping but it reduces 
+                the chance of this happening
+                """
+                pygame.draw.line(display, GREEN, start, (start[0], end[1]), width=4)
+                pygame.draw.line(display, GREEN, (start[0], end[1]), end, width=4)
+                plotted = True
                 overlap = True
-                
-        if overlap:
-            pygame.draw.line(display, RED, start, (start[0], end[1]), width=4)
-            pygame.draw.line(display, RED, (start[0], end[1]), end, width=4)
-            continue
-
-        pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
-        pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
+            else:
+                pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
+                pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
+                plotted = True
+        if not plotted:
+            pygame.draw.line(display, RED, start, (end[0], start[1]), width=4)
+            pygame.draw.line(display, RED, (end[0], start[1]), end, width=4)
+        
+    return overlap
         
 def room_overlap(start_xy: tuple, end_xy: tuple, room: object):
     """Check if a hallway goes through a room"""
-    #horizontal
-    if (room.center()[1] - room.height() < start_xy[1] < room.center()[1] + room.height()
-        and room.center()[0] + room.width() > start_xy[0]
-        and room.center()[0] - room.width() < end_xy[0]
-        or room.center()[0] - room.width() < end_xy[0]
-        and room.center()[0] + room.width() > start_xy[0]
-    ):
-        return True
+    #check the horizontal part of the hallway
+    #room is in the same y-range
+    if room.center()[1] - room.height() < start_xy[1] < room.center()[1] + room.height():
+        #room is in the same x-range on the right side
+        if room.center()[0] + room.width() > start_xy[0] and room.center()[0] - room.width() < end_xy[0]:
+            return True
+        #room is in the same x-range on the left side
+        if room.center()[0] - room.width() < end_xy[0] and room.center()[0] + room.width() > start_xy[0]:
+            return True
 
-    #vertical
-    if (room.center()[0] + room.width() > end_xy[0] > room.center()[0] - room.width()
-        and room.center()[1] + room.height() > start_xy[1]
-        and room.center()[1] - room.height() < end_xy[1]
-        or room.center()[1] - room.height() < end_xy[1]
-        and room.center()[1] + room.height() > start_xy[1] 
-    ):
-        return True
+    #check the vertical part of the hallway
+    #room is in the same x-range
+    if room.center()[0] + room.width() > end_xy[0] > room.center()[0] - room.width():
+        #whole room is above ending node
+        if room.center()[1] + room.height() > start_xy[1] and room.center()[1] - room.height() < end_xy[1]:
+            return True
+        #whole room is below starting node
+        if room.center()[1] - room.height() < end_xy[1] and room.center()[1] + room.height() > start_xy[1]:
+            return True
 
     return False
 

@@ -24,25 +24,27 @@ LIGHTGRAY = (211, 211, 211)
 GRAY = (128, 128, 128)
 
 def main():
-    print("Welcome to the dungeon generator!")
-    print("First let's define the size of the dungeon")
-    print("Recommendation: width 900px, height 500px, rooms 3-20")
-    print("")
+    print(
+        "Welcome to the dungeon generator! Let's start by defining the size \n"
+        "\n"
+        "Recommendation: width - 900px, height - 500px, rooms - 15 \n"
+        "Limits: width > 400px, height > 300px, rooms > 2 \n"
+    )
     while True:
 
-        width = int(input("Choose a width of at least 400: "))
+        width = int(input("Choose a width: "))
 
         if width < 400:
             print(f"{width} is too narrow")
             continue
 
-        height = int(input("Choose a height of at least 300: "))
+        height = int(input("Choose a height: "))
 
         if height < 300:
             print(f"{height} is too low")
             continue
 
-        nodes = int(input("Choose how many rooms - at least 3: "))
+        nodes = int(input("How many rooms: "))
 
         if nodes < 3:
             print(f"{nodes} is not enough")
