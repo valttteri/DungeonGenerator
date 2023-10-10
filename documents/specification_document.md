@@ -1,4 +1,4 @@
-# Specification document/Määrittelydokumentti
+## Specification document/Määrittelydokumentti
 
 #### Overview
 - Study program: Bachelor of Computer Science (TKT)
