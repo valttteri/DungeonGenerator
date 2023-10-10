@@ -1,6 +1,5 @@
 from math import sqrt
 from random import randint
-from bowyerwatson import bowyer_watson
 import pygame
 
 DISPLAY_WIDTH = 900
@@ -70,22 +69,11 @@ def generate_coordinates(count: int, width: int, height: int):
 
         if valid:
             coordinate_list.append(candidate)
-        if len(coordinate_list) == count:
-            if is_node_alone(coordinate_list, count, display):
-                coordinate_list = []
         counter += 1
         if counter > 1000:
             return 1
 
     return coordinate_list
-
-def is_node_alone(coordinates: list, count: int, display):
-    """Check if these coordinates will form a valid triangulation"""
-    triangulation = bowyer_watson(coordinates, super_coordinates, display)
-    edges = unique_edges(triangulation)
-    graph = create_graph(edges)
-
-    return len(graph) != count
 
 def are_edges_equal(edge_1: list, edge_2: list):
     """Check if two separate edges are equal"""
@@ -109,7 +97,7 @@ def unique_edges(triangles: list):
 
 def create_graph(edges: list):
     """This function creates a graph based on some edges. The layout for the graph is
-    basically {nodes coordinates: [neighbors coordinates, distance to neighbor]}"""
+    basically {node coordinates: [neighbor1 coordinates, distance to neighbor], [n2, distance],...}"""
     graph = {}
 
     for edge in edges:

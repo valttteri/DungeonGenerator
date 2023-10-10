@@ -12,7 +12,7 @@ from classes.hallwayclass import generate_hallways, plot_hallways
 DISPLAY_WIDTH = 900
 DISPLAY_HEIGHT = 500
 """NODE_COUNT equals to the number of nodes given to the algorithm"""
-NODE_COUNT = 15
+NODE_COUNT = 4
 X_MIN = 100
 X_MAX = DISPLAY_WIDTH - 100
 Y_MIN = 50
@@ -65,10 +65,6 @@ def testing_generator():
             print("Reduce the amount of rooms or increase the display size")
             sys.exit()
 
-        triangulation = bowyer_watson(coordinates, super_coordinates, display)
-        #print('coordinates:')
-        #for c in coordinates:
-        #    print(c)
         triangulation = bowyer_watson(coordinates, super_coordinates, display)
         edges = tools.unique_edges(triangulation)
 
@@ -129,7 +125,7 @@ def testing_generator():
             room.plot()
 
         pygame.display.flip()
-        pygame.time.wait(2000)
+        pygame.time.wait(10)
 
 if __name__ == '__main__':
     testing_generator()
