@@ -75,13 +75,6 @@ def generate_coordinates(count: int, width: int, height: int):
 
     return coordinate_list
 
-def are_edges_equal(edge_1: list, edge_2: list):
-    """Check if two separate edges are equal"""
-
-    return (edge_1[0] == edge_2[0] and edge_1[1] == edge_2[1]) or (
-        edge_1[0] == edge_2[1] and edge_1[1] == edge_2[0]
-    )
-
 def unique_edges(triangles: list):
     """Returns a list containing unique edges in a triangulation"""
     edge_list=set()
@@ -129,34 +122,3 @@ def create_graph(edges: list):
                 graph[edge[1]].append([edge[0], distance])
 
     return graph
-
-def find_minimum_edge(edges: dict):
-    """This function finds the shortest edge from a graph"""
-    min_edge = None
-    min_weight = 10**10
-    for node in edges:
-        if edges[node][1] < min_weight:
-            min_edge = (edges[node][0], node)
-            min_weight = edges[node][1]
-
-    return min_edge
-
-def find_removed_edges(minimum_spanning_tree: list, edges: list):
-    """Find the edges of a Delaunay triangulation that were removed
-    by Prim's algorithm"""
-    returning_edges = []
-
-    for edge in edges:
-        """If lottery_number equals to less than 87, an edge will be returned"""
-        lottery_number = randint(0, 100)
-        valid = True
-        if edge in minimum_spanning_tree:
-            valid = False
-        if (edge[1], edge[0]) in minimum_spanning_tree:
-            valid = False
-        if lottery_number < 87:
-            valid = False
-        if valid:
-            returning_edges.append(edge)
-
-    return returning_edges

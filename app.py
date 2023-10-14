@@ -5,6 +5,7 @@ import sys
 import pygame
 from prim import prims_algorithm
 from bowyerwatson import bowyer_watson
+from random import randint
 import tools
 import plotting
 from classes.roomclass import generate_rooms
@@ -203,6 +204,25 @@ def coordinates_and_rooms(display, NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_
 
         return coordinates, rooms
 
+def find_removed_edges(minimum_spanning_tree: list, edges: list):
+    """Find the edges of a Delaunay triangulation that were removed
+    by Prim's algorithm"""
+    returning_edges = []
+
+    for edge in edges:
+        """If lottery_number equals to less than 87, an edge will be returned"""
+        lottery_number = randint(0, 100)
+        valid = True
+        if edge in minimum_spanning_tree:
+            valid = False
+        if (edge[1], edge[0]) in minimum_spanning_tree:
+            valid = False
+        if lottery_number < 87:
+            valid = False
+        if valid:
+            returning_edges.append(edge)
+
+    return returning_edges
 
 if __name__ == '__main__':
     main()

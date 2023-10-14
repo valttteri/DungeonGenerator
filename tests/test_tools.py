@@ -1,7 +1,7 @@
 import unittest
 import tools
 from random import randint
-from bowyerwatson import bowyer_watson
+from bowyerwatson import bowyer_watson, are_edges_equal
 
 class TestTools(unittest.TestCase):
     def setUp(self):
@@ -37,12 +37,6 @@ class TestTools(unittest.TestCase):
         self.assertEqual(tools.distance_between_points((2, 3), (2, -2)), 5)
         self.assertEqual(round(tools.distance_between_points((3, 5), (7, 3)), 6), 4.472)
     
-    def test_are_edges_equal(self):
-        self.assertTrue(tools.are_edges_equal([(3, 4), (7, 6)], [(3, 4), (7, 6)]))
-        self.assertTrue(tools.are_edges_equal([(3, 4), (7, 6)], [(7, 6), (3, 4)]))
-        self.assertFalse(tools.are_edges_equal([(3, 4), (7, 6)], [(3, 4), (7, 4)]))
-        self.assertFalse(tools.are_edges_equal([(3, 4), (7, 6)], [(7, 6), (1, 1)]))
-    
     def test_generate_coordinates(self):
         no_duplicates = True
         not_near_each_other = True
@@ -71,25 +65,6 @@ class TestTools(unittest.TestCase):
             for j in range(len(edges)):
                 if i == j:
                     continue
-                if tools.are_edges_equal(edges[i], edges[j]):
+                if are_edges_equal(edges[i], edges[j]):
                     self.assertFalse(no_duplicates)
         self.assertTrue(no_duplicates)
-
-    def test_find_minimum_edge(self):
-        found_correct_edge = True
-        extra_coordinate = (1111, 1234)
-        extra_end_node = ((1111, 1244), randint(1, 80))
-        edges = {}
-
-        edges[extra_coordinate] = extra_end_node
-
-        for coordinate in self.coordinates:
-            other_node = (randint(1000, 1500), randint(1000, 1500))
-            distance = (randint(200, 300))
-            edges[coordinate] = (other_node, distance)
-        
-        
-        minimum_edge = tools.find_minimum_edge(edges)
-        if minimum_edge != (extra_end_node[0], extra_coordinate):
-            self.assertTrue(found_correct_edge)
-        self.assertTrue(found_correct_edge)

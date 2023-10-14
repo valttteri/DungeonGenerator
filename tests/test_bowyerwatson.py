@@ -1,6 +1,6 @@
 import unittest
 import tools
-from bowyerwatson import bowyer_watson
+from bowyerwatson import bowyer_watson, are_edges_equal
 
 class TestBowyerWatson(unittest.TestCase):
     """Testing Bowyer-Watson's algorithm"""
@@ -20,19 +20,19 @@ class TestBowyerWatson(unittest.TestCase):
 
     def test_bowyer_watson(self):
         for i in range(500):
-            valid = True
             coords = tools.generate_coordinates(4, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
             triangulation = bowyer_watson(coords, self.super_coordinates, 1)
-            if len(triangulation) == 2 or len(triangulation) == 3:
-                self.assertTrue(valid)
-            else:
-                self.assertFalse(valid)
+
+            self.assertGreater(len(triangulation), 1)
+            self.assertLess(len(triangulation), 4)
 
         for i in range(500):
-            valid = True
             coords = tools.generate_coordinates(3, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
             triangulation = bowyer_watson(coords, self.super_coordinates, 1)
-            if len(triangulation) == 1:
-                self.assertTrue(valid)
-            else:
-                self.assertFalse(valid)
+            self.assertEqual(len(triangulation), 1)
+    
+    def test_are_edges_equal(self):
+        self.assertTrue(are_edges_equal([(3, 4), (7, 6)], [(3, 4), (7, 6)]))
+        self.assertTrue(are_edges_equal([(3, 4), (7, 6)], [(7, 6), (3, 4)]))
+        self.assertFalse(are_edges_equal([(3, 4), (7, 6)], [(3, 4), (7, 4)]))
+        self.assertFalse(are_edges_equal([(3, 4), (7, 6)], [(7, 6), (1, 1)]))

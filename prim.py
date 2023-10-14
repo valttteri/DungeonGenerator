@@ -42,7 +42,7 @@ def prims_algorithm(triangulation: dict):
     #start filling the minimum spanning tree one node at a time
     while len(minimum_spanning_tree) < len(graph)-1:
         #find the shortest edge
-        min_edge = tools.find_minimum_edge(edges)
+        min_edge = find_minimum_edge(edges)
 
         minimum_spanning_tree.append(min_edge)
 
@@ -62,7 +62,17 @@ def prims_algorithm(triangulation: dict):
 
     return minimum_spanning_tree
 
+def find_minimum_edge(edges: dict):
+    """This function finds the shortest edge from a graph"""
+    min_edge = None
+    min_weight = 10**10
+    for node in edges:
+        if edges[node][1] < min_weight:
+            min_edge = (edges[node][0], node)
+            min_weight = edges[node][1]
+
+    return min_edge
+
 if __name__ == '__main__':
     mst = prims_algorithm(tuples)
     print(mst)
-    print(tools.find_removed_edges(mst, tuples))
