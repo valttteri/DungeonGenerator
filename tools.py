@@ -45,8 +45,8 @@ def distance_between_points(point_a: tuple, point_b: tuple):
 
 def generate_coordinates(count: int, width: int, height: int):
     """Generate coordinates for the triangulation"""
-    min_x = 50
-    max_x = width - 50
+    min_x = 100
+    max_x = width - 100
     min_y = 50
     max_y = height - 50
     display = pygame.display.set_mode((width, height))

@@ -222,6 +222,7 @@ def generate_hallways(graph: dict, rooms: list, display):
         for end_node in end_nodes:
             if end_node[0] in used_nodes:
                 continue
+
             starting_room, ending_room = find_hallways_rooms(start_node, end_node[0], rooms)
             hallways.append(Hallway(starting_room, ending_room, display))
         used_nodes.add(start_node)
@@ -239,6 +240,6 @@ def find_hallways_rooms(start_node, end_node, rooms):
         elif room.center() == end_node:
             ending_room = room
 
-    if starting_room is not None is not ending_room:
+    if starting_room is not None and ending_room is not None:
         return starting_room, ending_room
-    return f"no hallway found between nodes {start_node} and {end_node}"
+    print(f"no hallway found between nodes {start_node} and {end_node}")
