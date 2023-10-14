@@ -10,5 +10,5 @@ my work is done. Next step is optimization. The most essential things to optimiz
 spawn in a way that they don't overlap. As far as I know there are some algorithms to make this work but I'm not sure how I'm going to do this.
 What comes to hallways they should not go throught rooms. I think this can be done with some simple calculations.
 
-My tasks for next week are improving the tests and optimizing the code.
+My tasks for next week are improving the tests and optimizing the code. I have worked for about 15 hours this week.
 
