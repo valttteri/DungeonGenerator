@@ -8,6 +8,11 @@ import plotting
 from classes.roomclass import generate_rooms
 from classes.hallwayclass import generate_hallways, plot_hallways
 
+#python -m coverage run -m unittest tests\\test_app.py
+#python -m coverage run -m unittest discover tests
+#python -m coverage report
+#python -m coverage html
+
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)

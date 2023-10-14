@@ -120,15 +120,6 @@ def plot_vertical_hallway(hallway: object, rooms:list, display):
 
     possible_range = [max(start[0]-start_width, end[0]-end_width), min(start[0]+start_width, end[0]+end_width)]
     common_range = define_vertical_range(start, end, possible_range[0], possible_range[1], rooms)
-
-    #if possible_range != common_range:
-    #    vert_change = True
-    #    x_coordinate = randint(common_range[0], common_range[1])
-    #    pygame.draw.line(display, RED, (common_range[0], start[1]), (common_range[0], end[1]), width=2)
-    #    pygame.draw.line(display, RED, (common_range[1], start[1]), (common_range[1], end[1]), width=2)
-    #    pygame.draw.line(display, LIGHTGRAY, (x_coordinate, start[1]), (x_coordinate, end[1]), width=4)
-    #    pygame.draw.circle(display, BLUE, (start[0]+start_width, start[1]), radius=5)
-    #    continue
     
     if start[0] in common_range and end[0] in common_range:
         pygame.draw.line(display, LIGHTGRAY, start, (start[0], end[1]), width=4)
@@ -151,15 +142,6 @@ def plot_horizontal_hallway(hallway: object, rooms: list, display):
 
     possible_range = [max(start[1]-start_height, end[1]-end_height), min(start[1]+start_height, end[1]+end_height)]
     common_range = define_horizontal_range(start, end, possible_range[0], possible_range[1], rooms)
-
-    #if possible_range != common_range:
-    #    horiz_change = True
-    #    y_coordinate = randint(common_range[0], common_range[1])
-    #    pygame.draw.line(display, RED, (start[0], common_range[0]), (end[0], common_range[0]), width=2)
-    #    pygame.draw.line(display, RED, (start[0], common_range[1]), (end[0], common_range[1]), width=2)
-    #    pygame.draw.line(display, LIGHTGRAY, (start[0], y_coordinate), (end[0], y_coordinate), width=4)
-    #    pygame.draw.circle(display, BLUE, (start[0]+start_width, start[1]), radius=5)
-    #    continue
 
     if start[1] in common_range and end[1] in common_range:
         pygame.draw.line(display, LIGHTGRAY, start, (end[0], start[1]), width=4)

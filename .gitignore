@@ -1,8 +1,8 @@
-testing.py
 __pycache__
 __pycache__/    
 .coverage
 htmlcov/
+dungeon_testing
 #python -m coverage run -m unittest tests\\test_app.py
 #python -m coverage run -m unittest discover tests
 #python -m coverage report
