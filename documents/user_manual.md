@@ -11,7 +11,7 @@
 ```
 3. Run the program
 ```
-~/Tiralabra/ $ python3 app.py
+~/Tiralabra/ $ python app.py
 ```
 The program will ask you to enter values for height, width and room count. There are limits displayed and if an invalid input is entered, the program asks for a new one.
 Once a valid input is entered, a pygame window opens and the dungeon generation begins. Controls:
@@ -23,9 +23,9 @@ Remember to click the pygame window or pressing a key won't register. The contro
 force this by either setting ```PYTHONUNBUFFERED``` environment variable to equal true
 ```
 ~/Tiralabra/ $ export PYTHONUNBUFFERED=true
-~/Tiralabra/ $ python3 app.py
+~/Tiralabra/ $ python app.py
 ```
 or run the program as follows
 ```
-~/Tiralabra/ $ python3 -u app.py
+~/Tiralabra/ $ python -u app.py
 ```
