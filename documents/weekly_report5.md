@@ -12,4 +12,4 @@ I created an src folder for the source code after the lack of said folder was po
 peer review. For some reason my tests stopped working when I did that?? I then deleted the src cause I'd 
 rather have working tests right now. Weird. I'll try to figure that one out later. 
 
-Next I'll write more tests and continue optimizing the code.
+Next I'll write more tests and continue optimizing the code. I have worked for about 14 hours this week
