@@ -43,17 +43,17 @@ def main():
 
         nodes = int(input(f"Choose 3-{limit} rooms: "))
 
+        print("")
+        print("Press 1 to generate again")
+        print("Press 2 to start over")
+        print("Press 3 to quit")
+
         if nodes < 3:
             print(f"{nodes} is not enough\n")
             continue
         if nodes > limit:
             print(f"{nodes} is too much")
             continue
-
-        print("")
-        print("Press 1 to generate again")
-        print("Press 2 to start over")
-        print("Press 3 to quit")
 
         dungeon_generator(nodes, width, height)
 

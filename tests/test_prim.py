@@ -16,8 +16,7 @@ class TestPrim(unittest.TestCase):
         self.coordinates = tools.generate_coordinates(10, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
 
     def test_prim(self):
-        for i in range(500):
-            valid = True
+        for i in range(1000):
             count = randint(3, 15)
 
             coords = tools.generate_coordinates(count, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
@@ -25,10 +24,7 @@ class TestPrim(unittest.TestCase):
             mst = prim.prims_algorithm(triangulation)
             graph = tools.create_graph(mst)
 
-            if len(graph) != count:
-                self.assertFalse(valid)
-            else:
-                self.assertTrue(valid)
+            self.assertEqual(len(graph), count)
 
     def test_find_minimum_edge(self):
         found_correct_edge = True
