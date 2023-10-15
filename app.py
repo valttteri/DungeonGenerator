@@ -15,25 +15,8 @@ def main():
     print(
         "\n"
         "Welcome to the dungeon generator!\n"
-        "\n"
-        "Enter 1 to read the manual\n"
-        "Enter 2 to start\n"
-        "Enter any other key to quit\n"
     )
-    while True:
-        
-        user_input = input("Input: ")
-        print("")
-
-        if user_input == "1":
-            guide()
-        elif user_input == "2":
-            get_input()
-        else:
-            sys.exit()
-
-def get_input():
-    while True:
+    while True:  
         width = int(input("Choose width (400-1200): "))
 
         if width < 400:
@@ -74,17 +57,6 @@ def get_input():
 
         dungeon_generator(nodes, width, height)
 
-def guide():
-    print(
-        "\n"
-        "This program generates a dungeon with rooms connected by hallways.\n"
-        "Give the program values for height and width and then choose how\n"
-        "many rooms will be generated. The dungeon can be 400-1200 pixels\n"
-        "wide and 400-700 pixels tall. If you give an invalid input, the program\n"
-        "will let you know. Once the program starts running, you can generate\n"
-        "again by pressing 1, start over by pressing 2 and quit by pressing 3.\n"
-    )
-
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -98,7 +70,7 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
     pygame.display.set_caption("Welcome to the Dungeon")
     clock = pygame.time.Clock()
 
-    """The following forces the pygame window on top"""
+    """Force the pygame window on top"""
     pin_window()
 
     display.fill((0, 0, 0))
@@ -112,7 +84,7 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
     edges = tools.unique_edges(triangulation)
 
     minimum_spanning_tree = prims_algorithm(triangulation)
-    removed_edges = tools.find_removed_edges(minimum_spanning_tree, edges)
+    removed_edges = find_removed_edges(minimum_spanning_tree, edges)
     all_edges = minimum_spanning_tree + removed_edges
 
     dungeon_graph = tools.create_graph(all_edges)
@@ -195,11 +167,16 @@ def pin_window():
     user32.SetWindowPos(window, -1, 10, 10, 0, 0, 0x0001)
 
 def coordinates_and_rooms(display, NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT: int):
+    """Make sure that the coordinates are valid for room generation"""
     while True:
         coordinates = tools.generate_coordinates(NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        
+        if coordinates == 1:
+            continue
+
         rooms = generate_rooms(coordinates, display)
 
-        if coordinates == 1 or rooms == 1:
+        if rooms == 1:
             continue
 
         return coordinates, rooms
