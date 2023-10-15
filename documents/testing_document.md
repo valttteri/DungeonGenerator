@@ -12,5 +12,17 @@ different inputs. The algorithm tests run 500 times each. They check if the algo
 of a valid size. These tests actually take the tools.py tests further as the algorithms use 
 the functions found in that file.
 
+#### Instructions for running the tests
+
 The tests can be done by installing modules Unittest and Coverage and configuring VSCode's testing
 window to include every file starting with "test_".
+1. Clone the repository and navigate to the root
+```
+~/ $ git clone https://github.com/valttteri/Tiralabra.git
+~/ $ cd Tiralabra 
+```
+2. Download the required modules
+```
+~/Tiralabra/ $ pip install -r requirements.txt
+```
+3. If you are using VSCode, you can now configure the testing window.
