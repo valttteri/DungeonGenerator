@@ -2,10 +2,8 @@
 
 [Test coverage report](https://valttteri.github.io/)
 
-I have tested my implementations of Bowyer-Watson's and Prim's algorithms, tools.py file and my Triangle class.
-I made the tests and the testing report with Unittest and Coverage. All of my tests are
-in the directory called 'tests'. I also have a file named 'dungeon_testing.py' which is an unofficial testing
-environment.
+I have tested my implementations of Bowyer-Watson's and Prim's algorithms and the contents of the classes directory and the tools.py file.
+I made the tests and the testing report with Unittest and Coverage. All of my tests are in the directory called 'tests'. 
 
 File test_tools.py tests the functions from file tools.py. The tests are done with a couple of
 different inputs. The algorithm tests run 500 times each. They check if the algorithms return a data structure
@@ -26,31 +24,33 @@ the functions found in that file.
 
 3. Run the tests
 ```
-~/Tiralabra/ $ python3 -m coverage run -m unittest discover tests
+~/Tiralabra/ $ python -m coverage run -m unittest discover tests
 ```
-Tests in a certain file can be run as follows
-```
-~/Tiralabra/ $ python3 -m coverage run -m unittest tests\\<file_name>
-```
+![title](images/vscode5.png)
+
 Create a report
 ```
-~/Tiralabra/ $ python3 -m coverage report
+~/Tiralabra/ $ python -m coverage report
 ```
 
-An alternate way of doing this is by configuring VSCode's testing page. If you don't use VSCOde, ignore the following.
+![title](images/vscode6.png)
 
-First go to the testing page and select "configure Python tests".
+An alternate way of doing this is by configuring VSCode's testing page. If you don't use VSCode, ignore the following.
+
+First go to the testing page and select "Configure Python Tests".
 
 ![title](images/vscode1.png)
 
-Select pytest. After this VSCode asks you to select the directory containing the tests. Select "tests".
+Select unittest. After this VSCode asks you to select the directory containing the tests. Select "tests".
 
 ![title](images/vscode2.png)
 
-Select option "test_*"
+Select option "test_*.py"
 
 ![title](images/vscode3.png)
 
 Now you can run the tests by clicking the double triangle button.
+
+![title](images/vscode4.png)
 
 
