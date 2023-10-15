@@ -14,8 +14,6 @@ the functions found in that file.
 
 #### Instructions for running the tests
 
-The tests can be done by installing modules Unittest and Coverage and configuring VSCode's testing
-window to include every file starting with "test_".
 1. Clone the repository and navigate to the root
 ```
 ~/ $ git clone https://github.com/valttteri/Tiralabra.git
@@ -25,4 +23,34 @@ window to include every file starting with "test_".
 ```
 ~/Tiralabra/ $ pip install -r requirements.txt
 ```
-3. If you are using VSCode, you can now configure the testing window.
+
+3. Run the tests
+```
+~/Tiralabra/ $ python3 -m coverage run -m unittest discover tests
+```
+Tests in a certain file can be run as follows
+```
+~/Tiralabra/ $ python3 -m coverage run -m unittest tests\\<file_name>
+```
+Create a report
+```
+~/Tiralabra/ $ python3 -m coverage report
+```
+
+An alternate way of doing this is by configuring VSCode's testing page. If you don't use VSCOde, ignore the following.
+
+First go to the testing page and select "configure Python tests".
+
+![title](images/vscode1.png)
+
+Select pytest. After this VSCode asks you to select the directory containing the tests. Select "tests".
+
+![title](images/vscode2.png)
+
+Select option "test_*"
+
+![title](images/vscode3.png)
+
+Now you can run the tests by clicking the double triangle button.
+
+
