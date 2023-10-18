@@ -49,7 +49,6 @@ def generate_coordinates(count: int, width: int, height: int):
     max_x = width - 100
     min_y = 50
     max_y = height - 50
-    display = pygame.display.set_mode((width, height))
 
     coordinate_list = []
     counter = 0

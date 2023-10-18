@@ -92,11 +92,9 @@ def plot_hallways(display, hallways: list, rooms:list):
             if room.center() == start or room.center() == end:
                 continue
             if room_overlap_horizontal(start, end, room) or room_overlap_vertical(start, end, room):
-                """
-                If there's a room on the way, the hallway is plotted on the opposite side.
-                In an unlucky case that might also lead to overlapping but it reduces 
-                the chance of this happening
-                """
+                #If there's a room on the way, the hallway is plotted on the opposite side.
+                #In an unlucky case that might also lead to overlapping but it reduces
+                #the chance of this happening
                 pygame.draw.line(display, LIGHTGRAY, start, (start[0], end[1]), width=4)
                 pygame.draw.line(display, LIGHTGRAY, (start[0], end[1]), end, width=4)
                 plotted = True
@@ -108,19 +106,20 @@ def plot_hallways(display, hallways: list, rooms:list):
         if not plotted:
             pygame.draw.line(display, LIGHTGRAY, start, (end[0], start[1]), width=4)
             pygame.draw.line(display, LIGHTGRAY, (end[0], start[1]), end, width=4)
-        
+
     return overlap, horiz_change, vert_change
 
 def plot_vertical_hallway(hallway: object, rooms:list, display):
-    #define the range of x-coordinates where a hallway can be generated
+    """Define the range of x-coordinates where a hallway can be generated"""
     start = hallway.start_node()
     end = hallway.end_node()
     start_width = hallway.start_width()
     end_width = hallway.end_width()
 
-    possible_range = [max(start[0]-start_width, end[0]-end_width), min(start[0]+start_width, end[0]+end_width)]
+    possible_range = [max(start[0]-start_width, end[0]-end_width),
+                      min(start[0]+start_width, end[0]+end_width)]
     common_range = define_vertical_range(start, end, possible_range[0], possible_range[1], rooms)
-    
+
     if start[0] in common_range and end[0] in common_range:
         pygame.draw.line(display, LIGHTGRAY, start, (start[0], end[1]), width=4)
         return
@@ -134,13 +133,14 @@ def plot_vertical_hallway(hallway: object, rooms:list, display):
     return
 
 def plot_horizontal_hallway(hallway: object, rooms: list, display):
-    """define the range of y-coordinates where a hallway can be generated"""
+    """Define the range of y-coordinates where a hallway can be generated"""
     start = hallway.start_node()
     end = hallway.end_node()
     start_height = hallway.start_height()
     end_height = hallway.end_height()
 
-    possible_range = [max(start[1]-start_height, end[1]-end_height), min(start[1]+start_height, end[1]+end_height)]
+    possible_range = [max(start[1]-start_height, end[1]-end_height),
+                      min(start[1]+start_height, end[1]+end_height)]
     common_range = define_horizontal_range(start, end, possible_range[0], possible_range[1], rooms)
 
     if start[1] in common_range and end[1] in common_range:
