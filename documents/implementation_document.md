@@ -2,11 +2,20 @@
 
 #### General structure
 
-The project consists of three main parts: app.py file which runs the program, algorithm implementations and helpful tools.
-The height and width of the dungeon and the number of rooms to be generated are given to the program by user. If the 
-input is invalid the user gets notified and has to give another input. Once a valid input is given, the program gives
-Bowyer-Watson's algorithm a bunch of coordinates that get turned into a Delaunay's triangulation. Then Prim's algorithm 
-turns it into a minimum spanning tree and finally rooms and hallways are generated.
+The project consists of four main parts: `app.py`, `bowyerwatson.py`, `prim.py` and a directory called `classes` containing `hallwayclass.py`, `roomclass.py` and `triangleclass.py`.
+User can start the program by running `app.py`. Then they get to input parameters for the dungeon generation. The parameters are width, height and room count.
+There are limits for the parameters and if an invalid input is given the program asks for a new one.
+
+When the program receives a valid input, it generates a number of coordinates equal to the room count and gives them
+to the Bowyer-Watson's algorithm located in `bowyerwatson.py`. The algorithm then forms a Delaunay triangulation based on the coordinates.
+The triangle objects are defined in `triangleclass.py`. Room objects defined in `roomclass.py` are also generated at this point.
+
+Next the Delaunay triangulation is turned into a minimum spanning tree by Prim's algorithm in `prim.py`. This eliminates possibility for alternate 
+routes and therefore each removed edge has a 13% chance to be returned. At this point the program has an array of edges to be generated.
+It forms a graph with the edges which is used to generate hallway objects in `hallwayclass.py`. 
+
+Finally the dungeon is generated step by step on a Pygame window to show the process behind it. When the generation is finished, the user can either generate 
+a new dungeon with the same parameters, give a new input or close the program.
 
 #### Achieved time and space requirements
 
@@ -14,7 +23,7 @@ My implementations of Bowyer-Watson's and Prim's algorithms both run in O(n<sup>
 
 #### Shortcomings and suggestions for improvement
 
-Having multiple room shapes would make the dungeon look cooler.
+Having multiple room shapes would make the dungeon look cooler. The program would be more user friendly if instead of the console it was controlled with buttons on the Pygame window.
 
 #### Usage of chatbots
 
