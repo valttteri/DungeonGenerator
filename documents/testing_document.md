@@ -30,12 +30,12 @@ the functions found in that file.
 
 Create a report
 ```
-~/Tiralabra/ $ python -m coverage report
+~/Tiralabra/ $ python -m coverage report --omit tests\*
 ```
 
-![title](images/vscode6.png)
+![title](images/vscode7.png)
 
-An alternate way of doing this is by configuring VSCode's testing page. If you don't use VSCode, ignore the following.
+An alternate way of doing this is by configuring VSCode's testing page.
 
 First go to the testing page and select "Configure Python Tests".
 
