@@ -19,16 +19,15 @@ class TestBowyerWatson(unittest.TestCase):
         
 
     def test_bowyer_watson(self):
-        for i in range(500):
-            coords = tools.generate_coordinates(4, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
-            triangulation = bowyer_watson(coords, self.super_coordinates, 1)
+        for i in range(1000):
+            triangulation = get_triangulation(4, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT, self.super_coordinates)
 
             self.assertGreater(len(triangulation), 1)
             self.assertLess(len(triangulation), 4)
 
-        for i in range(500):
-            coords = tools.generate_coordinates(3, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
-            triangulation = bowyer_watson(coords, self.super_coordinates, 1)
+        for i in range(1000):
+            triangulation = get_triangulation(3, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT, self.super_coordinates)
+
             self.assertEqual(len(triangulation), 1)
     
     def test_are_edges_equal(self):
@@ -36,3 +35,12 @@ class TestBowyerWatson(unittest.TestCase):
         self.assertTrue(are_edges_equal([(3, 4), (7, 6)], [(7, 6), (3, 4)]))
         self.assertFalse(are_edges_equal([(3, 4), (7, 6)], [(3, 4), (7, 4)]))
         self.assertFalse(are_edges_equal([(3, 4), (7, 6)], [(7, 6), (1, 1)]))
+
+def get_triangulation(count, width, height, super_coordinates):
+    while True:
+        coords = tools.generate_coordinates(count, width, height)
+        triangulation = bowyer_watson(coords, super_coordinates, 1)
+
+        if len(triangulation) == 0:
+            continue
+        return triangulation

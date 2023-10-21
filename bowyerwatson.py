@@ -1,8 +1,6 @@
 from classes.triangleclass import Triangle
 from math import sqrt
 
-#super_coordinates = [(-10, -400), (1500, 300), (-10, 1200)]
-
 def bowyer_watson(nodelist: list, super_coordinates: list, display):
     """
     Bowyer-Watson algorithm for generating a Delaunay triangulation. Steps:

@@ -1,6 +1,6 @@
 import unittest
 from random import randint
-from classes.hallwayclass import room_overlap_horizontal, room_overlap_vertical, generate_hallways
+from classes.hallwayclass import Hallway, room_overlap_horizontal, room_overlap_vertical, generate_hallways
 from classes.roomclass import Room, generate_rooms
 from tools import generate_coordinates, create_graph, unique_edges
 from bowyerwatson import bowyer_watson
@@ -45,6 +45,9 @@ class TestHallway(unittest.TestCase):
             hallways = generate_hallways(dungeon_graph, rooms, 1)
 
             self.assertEqual(len(minimum_spanning_tree), len(hallways))
+    
+    def test_define_vertical_range(self):
+        room = Room((500, 500), 50, 50, 1)
 
 def coordinates_and_rooms(display, NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT: int):
     """Make sure that the coordinates are valid for room generation"""
