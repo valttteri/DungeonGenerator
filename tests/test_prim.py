@@ -3,6 +3,7 @@ import tools
 from random import randint
 from bowyerwatson import bowyer_watson
 import prim
+from tools import generate_coordinates
 
 class TestPrim(unittest.TestCase):
     """Testing Bowyer-Watson's algorithm"""
@@ -19,7 +20,8 @@ class TestPrim(unittest.TestCase):
         for i in range(1000):
             count = randint(3, 15)
 
-            coords = tools.generate_coordinates(count, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
+            coords = get_coordinates(count, self.DISPLAY_WIDTH, self.DISPLAY_HEIGHT)
+
             triangulation = bowyer_watson(coords, self.super_coordinates, 1)
             mst = prim.prims_algorithm(triangulation)
             graph = tools.create_graph(mst)
@@ -44,3 +46,10 @@ class TestPrim(unittest.TestCase):
         if minimum_edge != (extra_end_node[0], extra_coordinate):
             self.assertTrue(found_correct_edge)
         self.assertTrue(found_correct_edge)
+
+def get_coordinates(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT: int):
+    while True:
+        coordinates = generate_coordinates(NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+        if coordinates == 1:
+            continue
+        return coordinates
