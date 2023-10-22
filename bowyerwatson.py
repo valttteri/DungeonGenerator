@@ -1,5 +1,13 @@
 from classes.triangleclass import Triangle
 from math import sqrt
+import pygame
+
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+WHITE = (255, 255, 255)
+LIGHTGRAY = (211, 211, 211)
+GRAY = (128, 128, 128)
 
 def bowyer_watson(nodelist: list, super_coordinates: list, display):
     """

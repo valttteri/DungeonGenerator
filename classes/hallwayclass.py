@@ -110,12 +110,14 @@ def plot_hallways(display, hallways: list, rooms:list):
     return overlap, horiz_change, vert_change
 
 def plot_vertical_hallway(hallway: object, rooms:list, display):
-    """Define the range of x-coordinates where a hallway can be generated"""
+    """Plot a vertical hallway"""
     start = hallway.start_node()
     end = hallway.end_node()
     start_width = hallway.start_width()
     end_width = hallway.end_width()
 
+    """Define the range of x-coordinates where a hallway can be plotted. If there is a room
+    on the way, the range will get smaller"""
     possible_range = [max(start[0]-start_width, end[0]-end_width),
                       min(start[0]+start_width, end[0]+end_width)]
     common_range = define_vertical_range(start, end, possible_range[0], possible_range[1], rooms)
@@ -133,12 +135,14 @@ def plot_vertical_hallway(hallway: object, rooms:list, display):
     return
 
 def plot_horizontal_hallway(hallway: object, rooms: list, display):
-    """Define the range of y-coordinates where a hallway can be generated"""
+    """Plot a horizontal hallway"""
     start = hallway.start_node()
     end = hallway.end_node()
     start_height = hallway.start_height()
     end_height = hallway.end_height()
 
+    """Define the range of y-coordinates where a hallway can be plotted. If there is a room
+    on the way, the range will get smaller"""
     possible_range = [max(start[1]-start_height, end[1]-end_height),
                       min(start[1]+start_height, end[1]+end_height)]
     common_range = define_horizontal_range(start, end, possible_range[0], possible_range[1], rooms)
@@ -156,7 +160,7 @@ def plot_horizontal_hallway(hallway: object, rooms: list, display):
     return
 
 def define_horizontal_range(start_xy: tuple, end_xy: tuple, min_value: int, max_value: int, rooms: object):
-    """check if a horizontal hallway is possibly about to overlap with a room"""
+    """Check if a horizontal hallway is possibly about to overlap with a room"""
     for room in rooms:
         if start_xy[0] < room.center()[0] < end_xy[0]:
             #the room is above the hallway
@@ -171,15 +175,15 @@ def define_horizontal_range(start_xy: tuple, end_xy: tuple, min_value: int, max_
     return [min_value, max_value]
 
 def define_vertical_range(start_xy: tuple, end_xy: tuple, min_value: int, max_value: int, rooms: object):
-    """check if a vertical hallway is possibly about to overlap with a room"""
+    """Check if a vertical hallway is possibly about to overlap with a room"""
     for room in rooms:
         if start_xy[1] < room.center()[1] < end_xy[1]:
-            #the room is to the right of a hallway
+            #the room is to the left of a hallway
             if min_value < room.center()[0] + room.width() < max_value:
                 min_value = room.center()[0] + room.width()
                 return [min_value, max_value]
             
-            #the room is to the left of a hallway
+            #the room is to the right of a hallway
             if min_value < room.center()[0] - room.width() < max_value:
                 max_value = room.center()[0] - room.width()
                 return [min_value, max_value]
