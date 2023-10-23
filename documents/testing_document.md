@@ -29,7 +29,7 @@ These tests actually take the ``tools.py`` tests further as the algorithms use f
 ```
 ![title](images/vscode5.png)
 
-Create a report
+Create a report. If the test files are included you can try ``--omit tests\\*``
 ```
 ~/Tiralabra/ $ python -m coverage report --omit tests\*
 ```
