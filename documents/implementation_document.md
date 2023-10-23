@@ -11,15 +11,15 @@ to the Bowyer-Watson's algorithm located in `bowyerwatson.py`. The algorithm the
 The triangle objects are defined in `triangleclass.py`. Room objects defined in `roomclass.py` are also generated at this point.
 
 Next the Delaunay triangulation is turned into a minimum spanning tree by Prim's algorithm in `prim.py`. This eliminates possibility for alternate 
-routes and therefore each removed edge has a 13% chance to be returned. At this point the program has an array of edges to be generated.
-It forms a graph with the edges which is used to generate hallway objects in `hallwayclass.py`. 
+routes and therefore each removed edge has a 13% chance to be returned. Now the program has an array of edges needed for hallway generation.
+It forms a graph with the edges and generates the hallways.
 
-Finally the dungeon is generated step by step on a Pygame window to show the process behind it. When the generation is finished, the user can either generate 
+Finally the dungeon is plotted step by step in a Pygame window to show the process behind it. When the generation is finished, the user can either generate 
 a new dungeon with the same parameters, give a new input or close the program.
 
 #### Achieved time and space requirements
 
-My implementations of Bowyer-Watson's and Prim's algorithms both run in O(n<sup>2</sup>) time.
+My implementations of Bowyer-Watson's and Prim's algorithms both run in O(n<sup>2</sup>) time. 
 
 #### Shortcomings and suggestions for improvement
 
