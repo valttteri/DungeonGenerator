@@ -88,8 +88,15 @@ def unique_edges(triangles: list):
     return edge_list
 
 def create_graph(edges: list):
-    """This function creates a graph based on some edges. The layout for the graph is
-    basically {node coordinates: [neighbor1 coordinates, distance to neighbor], [n2, distance],...}"""
+    """This function creates a graph based on some edges. The graph's structure is
+    basically {node coordinates: [neighbor1 coordinates, distance to neighbor], [n2, distance],...}
+    
+    Keyword arguments:
+        edges (list) -- array of edges (tuple, tuple) found in a triangulation
+
+    Returns
+        graph (dict) -- a graph based on the edges
+    """
     graph = {}
 
     for edge in edges:

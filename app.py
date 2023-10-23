@@ -2,23 +2,23 @@
 
 from ctypes import WinDLL, wintypes
 import sys
+from random import randint
 import pygame
 from prim import prims_algorithm
 from bowyerwatson import bowyer_watson
-from random import randint
 import tools
 import plotting
 from classes.roomclass import generate_rooms
 from classes.hallwayclass import generate_hallways, plot_hallways
 
 def main():
+    """Get input from user"""
     print(
         "\n"
         "Welcome to the dungeon generator!\n"
     )
     while True:  
         width = int(input("Choose width (400-1200): "))
-
         if width < 400:
             print(f"{width} is too narrow")
             continue
@@ -27,7 +27,6 @@ def main():
             continue
 
         height = int(input("Choose height (400-700): "))
-
         if height < 400:
             print(f"{height} is too low\n")
             continue
@@ -38,9 +37,7 @@ def main():
             width_digit = int(str(width)[0])
 
         height_digit = int(str(height)[0])
-
         limit = width_digit + height_digit - 2
-
         nodes = int(input(f"Choose 3-{limit} rooms: "))
 
         print("")
@@ -64,21 +61,26 @@ WHITE = (255, 255, 255)
 LIGHTGRAY = (211, 211, 211)
 GRAY = (128, 128, 128)
 
-def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
+def dungeon_generator(node_count: int, display_width: int, display_height):
+    """Generate a dungeon"""
     pygame.init()
-    display = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+    display = pygame.display.set_mode((display_width, display_height))
     pygame.display.set_caption("Welcome to the Dungeon")
     clock = pygame.time.Clock()
 
-    """Force the pygame window on top"""
+    #Force the pygame window on top
     pin_window()
 
     display.fill((0, 0, 0))
 
-    """Create all essential components"""
-    super_coordinates = [(-DISPLAY_WIDTH**2, -DISPLAY_HEIGHT**2), (DISPLAY_WIDTH**2, 0), (0, DISPLAY_HEIGHT**2)]
+    #Create all essential components
+    super_coordinates = [
+        (-display_width**2, -display_height**2),
+        (display_width**2, 0),
+        (0, display_height**2)
+    ]
 
-    coordinates, rooms = coordinates_and_rooms(display, NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+    coordinates, rooms = coordinates_and_rooms(display, node_count, display_width, display_height)
 
     triangulation = bowyer_watson(coordinates, super_coordinates, display)
     edges = tools.unique_edges(triangulation)
@@ -90,14 +92,14 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
     dungeon_graph = tools.create_graph(all_edges)
     hallways = generate_hallways(dungeon_graph, rooms, display)
 
-    """Start by plotting the coordinates"""
+    #Start by plotting the coordinates
     for node in coordinates:
         pygame.draw.circle(display, BLUE, node, 4)
 
     pygame.display.flip()
     pygame.time.wait(1000)
 
-    """Plot Delaunay triangulation"""
+    #Plot Delaunay triangulation
     for triangle in triangulation:
         triangle.plot()
 
@@ -105,7 +107,7 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
     pygame.time.wait(1000)
     display.fill((0, 0, 0))
 
-    """Plot the minimum spanning tree"""
+    #Plot the minimum spanning tree
     for node in coordinates:
         pygame.draw.circle(display, BLUE, node, 4)
     plotting.plot_mst(minimum_spanning_tree, display, GREEN)
@@ -113,7 +115,7 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
     pygame.display.flip()
     pygame.time.wait(1000)
 
-    """Plot the removed edges"""
+    #Plot the removed edges
     if len(removed_edges) != 0:
         for edge in removed_edges:
             pygame.draw.line(display, GREEN, edge[0], edge[1])
@@ -121,7 +123,7 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
         pygame.display.flip()
         pygame.time.wait(1000)
 
-    """Plot the rooms"""
+    #Plot the rooms
     for room in rooms:
         room.plot()
 
@@ -129,7 +131,7 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
     pygame.time.wait(1000)
     display.fill((0, 0, 0))
 
-    """Plot the hallways"""
+    #Plot the hallways
     plot_hallways(display, hallways, rooms)
 
     while True:
@@ -138,13 +140,13 @@ def dungeon_generator(NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT):
                 sys.exit()
             if action.type == pygame.KEYDOWN:
                 if action.key == pygame.K_1:
-                    dungeon_generator(NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
+                    dungeon_generator(node_count, display_width, display_height)
                 if action.key == pygame.K_2:
                     main()
                 if action.key == pygame.K_3:
                     sys.exit()
 
-        """Plot the hallways and then plot the rooms on top of them"""
+        #Plot the hallways and then plot the rooms on top of them
         for room in rooms:
             room.plot()
         pygame.display.flip()
@@ -166,11 +168,11 @@ def pin_window():
     ]
     user32.SetWindowPos(window, -1, 10, 10, 0, 0, 0x0001)
 
-def coordinates_and_rooms(display, NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT: int):
+def coordinates_and_rooms(display, node_count: int, display_width: int, display_height: int):
     """Make sure that the coordinates are valid for room generation"""
     while True:
-        coordinates = tools.generate_coordinates(NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
-        
+        coordinates = tools.generate_coordinates(node_count, display_width, display_height)
+
         if coordinates == 1:
             continue
 
@@ -187,7 +189,7 @@ def find_removed_edges(minimum_spanning_tree: list, edges: list):
     returning_edges = []
 
     for edge in edges:
-        """If lottery_number equals to less than 87, an edge will be returned"""
+        #If lottery_number is higher than 87, an edge will be returned
         lottery_number = randint(0, 100)
         valid = True
         if edge in minimum_spanning_tree:

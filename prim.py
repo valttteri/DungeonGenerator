@@ -4,8 +4,8 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
-"""Hard coded edges for testing"""
-tuples = [
+#Hard coded edges for testing
+t = [
     ((491, 173), (674, 166)),
     ((388, 324), (361, 223)),
     ((674, 166), (658, 185)),
@@ -17,13 +17,17 @@ tuples = [
 ]
 
 
-def prims_algorithm(triangulation: dict):
+def prims_algorithm(triangulation: list):
     """
     Prim's algorithm for creating a minimum spanning tree based on a triangulation. 
-    I had to improvise a little in order to get this to work and therefore the code 
-    is probably not very readable.
+
+    Keyword arguments:
+        triangulation (list) -- array containing triangle objects i.e. the Delaunay triangulation
+
+    Returns:
+        minimum_spanning_tree (list) -- array containing edges i.e. the minimum spanning tree 
     """
-    """Remove all duplicate edges from the triangulation and create a graph"""
+    #Remove all duplicate edges from the triangulation and create a graph
     tuples = tools.unique_edges(triangulation)
     graph = tools.create_graph(tuples)
 
@@ -31,11 +35,10 @@ def prims_algorithm(triangulation: dict):
     starting_node = list(graph.keys())[0]
     edges = {}
 
-    """
-    the edges will be stored in tuples a way that their parent node is 
-    on the first spot and the distance to the parent on the second spot
-    in this case: parent=starting_node, distance=n[1]
-    """
+    #the edges will be stored in tuples a way that their parent node is
+    #on the first spot and the distance to the parent on the second spot
+    #in this case: parent=starting_node, distance=n[1]
+
     for n in graph[starting_node]:
         edges[n[0]] = (starting_node, n[1])
 
@@ -43,10 +46,9 @@ def prims_algorithm(triangulation: dict):
     while len(minimum_spanning_tree) < len(graph)-1:
         #find the shortest edge
         min_edge = find_minimum_edge(edges)
-
         minimum_spanning_tree.append(min_edge)
 
-        #check if the node (short edges ending node) has any child nodes in the
+        #check if the node (short edge's ending node) has any child nodes in the
         #minimum spanning tree
         for node in graph[min_edge[1]]:
             found = False
@@ -74,5 +76,5 @@ def find_minimum_edge(edges: dict):
     return min_edge
 
 if __name__ == '__main__':
-    mst = prims_algorithm(tuples)
+    mst = prims_algorithm(t)
     print(mst)

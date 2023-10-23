@@ -31,8 +31,17 @@ def bowyer_watson(nodelist: list, super_coordinates: list, display):
 
     7. Check if there are triangles in the triangulation that share a node
     or an edge with the original super triangle. If so, remove these triangles.
+
+
+    Keyword arguments:
+        nodelist (list) -- array of coordinates
+        super_coordinates (list) -- array of coordinates that form the super triangle
+        display (Pygame object) -- the Pygame window where everything is plotted 
+
+    Returns:
+        triangulation (list) -- array of triangle objects i.e. the Delaunay triangulation
     """
-    """Step 1."""
+    #Step 1.
     while True:
         triangulation = []
         super_triangle = Triangle(
@@ -41,11 +50,11 @@ def bowyer_watson(nodelist: list, super_coordinates: list, display):
         super_triangle_nodes = super_triangle.show_nodes()
         triangulation.append(super_triangle)
 
-        """Step 2."""
+        #Step 2.
         for node in nodelist:
             bad_triangles = []
 
-            """Step 3."""
+            #Step 3.
             for triangle in triangulation:
                 circumcenter = triangle.circum_center()
                 circum_circles_radius = triangle.cc_radius()
@@ -56,7 +65,7 @@ def bowyer_watson(nodelist: list, super_coordinates: list, display):
 
             polygon = []
 
-            """Step 4."""
+            #Step 4.
             for bad_triangle in bad_triangles:
                 edges = bad_triangle.show_edges()
                 for edge in edges:
@@ -72,16 +81,16 @@ def bowyer_watson(nodelist: list, super_coordinates: list, display):
                     if not found:
                         polygon.append(edge)
 
-            """Step 5."""
+            #Step 5.
             for bad_triangle in bad_triangles:
                 triangulation.remove(bad_triangle)
 
-            """Step 6."""
+            #Step 6.
             for edge in polygon:
                 new_triangle = Triangle(edge[0], edge[1], node, display)
                 triangulation.append(new_triangle)
 
-        """Step 7."""
+        #Step 7.
         remove_triangles = []
         for triangle in triangulation:
             nodes = triangle.show_nodes()

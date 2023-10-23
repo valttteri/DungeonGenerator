@@ -1,13 +1,14 @@
 import unittest
 from random import randint
-from classes.hallwayclass import Hallway, define_horizontal_range, room_overlap_horizontal, room_overlap_vertical, generate_hallways, define_vertical_range
+from classes.hallwayclass import define_horizontal_range, room_overlap_horizontal, room_overlap_vertical, generate_hallways, define_vertical_range
 from classes.roomclass import Room, generate_rooms
-from tools import generate_coordinates, create_graph, unique_edges
+from tools import generate_coordinates, create_graph
 from bowyerwatson import bowyer_watson
 from prim import prims_algorithm
 
 class TestHallway(unittest.TestCase):
     def test_room_overlap_horizontal(self):
+        """Test the room_overlap_horizontal function"""
         room = Room((100, 100), 50, 50, 1)
 
         for i in range(500):
@@ -16,8 +17,9 @@ class TestHallway(unittest.TestCase):
             end = (randint(160, 300), y_coordinate)
 
             self.assertTrue(room_overlap_horizontal(start, end, room))
-    
+
     def test_room_overlap_vertical(self):
+        """Test the room_overlap_vertical function"""
         room = Room((500, 500), 50, 50, 1)
 
         for i in range(500):
@@ -26,8 +28,9 @@ class TestHallway(unittest.TestCase):
             end = (x_coordinate, randint(560, 800))
 
             self.assertTrue(room_overlap_vertical(start, end, room))
-    
+
     def test_generate_hallways(self):
+        """Test the generate_hallways function"""
         for i in range(500):
             node_count = randint(3, 12)
             height = 500
@@ -47,6 +50,7 @@ class TestHallway(unittest.TestCase):
             self.assertEqual(len(minimum_spanning_tree), len(hallways))
 
     def test_define_vertical_range(self):
+        """Test the define_vertical_range function"""
         for i in range(500):
             room = Room((90, 200), randint(10, 40), randint(15, 30), 1)
             start_xy = (100, 100)
@@ -54,10 +58,16 @@ class TestHallway(unittest.TestCase):
             min_value = 80
             max_value = 130
 
-            [new_min, new_max] = define_vertical_range(start_xy, end_xy, min_value, max_value, [room])
+            [new_min, new_max] = define_vertical_range(
+                start_xy,
+                end_xy,
+                min_value,
+                max_value,
+                [room]
+            )
 
             self.assertEqual(new_min, room.center()[0] + room.width())
-        
+
         for i in range(500):
             room = Room((120, 200), randint(10, 40), randint(15, 40), 1)
             start_xy = (100, 100)
@@ -65,11 +75,18 @@ class TestHallway(unittest.TestCase):
             min_value = 70
             max_value = 130
 
-            [new_min, new_max] = define_vertical_range(start_xy, end_xy, min_value, max_value, [room])
+            [new_min, new_max] = define_vertical_range(
+                start_xy,
+                end_xy,
+                min_value,
+                max_value,
+                [room]
+            )
 
             self.assertEqual(new_max, room.center()[0] - room.width())
-    
+
     def test_define_horizontal_range(self):
+        """Test the define_horizontal_range function"""
         for i in range(500):
             room = Room((200, 120), randint(15, 30), randint(10, 40), 1)
             start_xy = (100, 100)
@@ -77,10 +94,16 @@ class TestHallway(unittest.TestCase):
             min_value = 80
             max_value = 130
 
-            [new_min, new_max] = define_horizontal_range(start_xy, end_xy, min_value, max_value, [room])
+            [new_min, new_max] = define_horizontal_range(
+                start_xy,
+                end_xy,
+                min_value,
+                max_value,
+                [room]
+            )
 
             self.assertEqual(new_max, room.center()[1] - room.height())
-        
+
         for i in range(500):
             room = Room((200, 80), randint(15, 30), randint(10, 40), 1)
             start_xy = (100, 100)
@@ -88,26 +111,25 @@ class TestHallway(unittest.TestCase):
             min_value = 80
             max_value = 130
 
-            [new_min, new_max] = define_horizontal_range(start_xy, end_xy, min_value, max_value, [room])
+            [new_min, new_max] = define_horizontal_range(
+                start_xy,
+                end_xy,
+                min_value,
+                max_value,
+                [room]
+            )
 
             self.assertEqual(new_min, room.center()[1] + room.height())
 
-
-
-
-    
-def coordinates_and_rooms(display, NODE_COUNT: int, DISPLAY_WIDTH: int, DISPLAY_HEIGHT: int):
+def coordinates_and_rooms(display, node_count: int, display_width: int, display_height: int):
     """Make sure that the coordinates are valid for room generation"""
     while True:
-        coordinates = generate_coordinates(NODE_COUNT, DISPLAY_WIDTH, DISPLAY_HEIGHT)
-        
+        coordinates = generate_coordinates(node_count, display_width, display_height)
         if coordinates == 1:
             continue
 
         rooms = generate_rooms(coordinates, display)
-
         if rooms == 1:
             continue
 
         return coordinates, rooms
-
