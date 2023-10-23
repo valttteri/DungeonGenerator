@@ -2,13 +2,14 @@
 
 [Test coverage report](https://valttteri.github.io/)
 
-I have tested my implementations of Bowyer-Watson's and Prim's algorithms and the contents of the classes directory and the tools.py file.
-I made the tests and the testing report with Unittest and Coverage. All of my tests are in the directory called 'tests'. 
+I have mostly tested my implementations of Bowyer-Watson's and Prim's algorithms as they are the key components of my projects. Contents of the ``classes`` directory
+and the ``tools.py`` file have also been tested to a certain level. I have tried to focus on testing functions that do calculations or create data structures. Some functions in my code are for only plotting stuff in a Pygame window and therefore I have not written tests for them. 
+I made the tests and the testing report with Unittest and Coverage. All of my tests are in the ``tests`` directory. 
 
-File test_tools.py tests the functions from file tools.py. The tests are done with a couple of
-different inputs. The algorithm tests run 500 times each. They check if the algorithms return a data structure
-of a valid size. These tests actually take the tools.py tests further as the algorithms use 
-the functions found in that file.
+File ``test_tools.py`` tests the functions from file ``tools.py``. The tests are done with a couple of
+different inputs. The algorithm tests mostly use randomly generated inputs and run several hundred times each.
+They check if the algorithms create data structures and do calculations as they should.
+These tests actually take the ``tools.py`` tests further as the algorithms use functions found in said file.
 
 #### Instructions for running the tests
 
