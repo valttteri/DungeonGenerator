@@ -65,7 +65,7 @@ def dungeon_generator(node_count: int, display_width: int, display_height):
     """Generate a dungeon"""
     pygame.init()
     display = pygame.display.set_mode((display_width, display_height))
-    pygame.display.set_caption("Welcome to the Dungeon")
+    pygame.display.set_caption("Dungeon Generator")
     clock = pygame.time.Clock()
 
     #Force the pygame window on top
