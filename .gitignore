@@ -6,3 +6,4 @@ __pycache__/
 htmlcov/
 dungeontesting.py
 .coveragerc
+__init__.py
