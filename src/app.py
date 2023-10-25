@@ -62,7 +62,17 @@ LIGHTGRAY = (211, 211, 211)
 GRAY = (128, 128, 128)
 
 def dungeon_generator(node_count: int, display_width: int, display_height):
-    """Generate a dungeon"""
+    """Generate a dungeon
+    
+    Keyword arguments:
+        node_count (int) -- number of rooms to be generated
+        display_width (int) -- width of the dungeon
+        display_height (int) -- height of the dungeon
+    
+    Returns:
+        None
+    
+    """
     pygame.init()
     display = pygame.display.set_mode((display_width, display_height))
     pygame.display.set_caption("Dungeon Generator")
@@ -101,6 +111,7 @@ def dungeon_generator(node_count: int, display_width: int, display_height):
 
     #Plot Delaunay triangulation
     for triangle in triangulation:
+        #triangle.circum_circle()
         triangle.plot()
 
     pygame.display.flip()
@@ -166,7 +177,7 @@ def pin_window():
         wintypes.INT,
         wintypes.UINT
     ]
-    user32.SetWindowPos(window, -1, 10, 10, 0, 0, 0x0001)
+    user32.SetWindowPos(window, -1, 5, 5, 0, 0, 0x0001)
 
 def coordinates_and_rooms(display, node_count: int, display_width: int, display_height: int):
     """Make sure that the coordinates are valid for room generation"""

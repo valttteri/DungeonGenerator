@@ -83,7 +83,7 @@ def generate_rooms(coordinates: list, display):
                 room_list.append(new_room)
                 break
             counter += 1
-            if counter > 100:
+            if counter > 500:
                 return 1
 
     return room_list

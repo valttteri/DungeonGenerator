@@ -28,6 +28,9 @@ def bowyer_watson(nodelist: list, super_coordinates: list, display):
     5. Remove each bad triangle from the triangulation.
 
     6. Create a new triangle between the node and every edge in the polygon.
+    Add the triangles to the triangulation.
+
+    Repeat steps 3-6 until each node is in the triangulation
 
     7. Check if there are triangles in the triangulation that share a node
     or an edge with the original super triangle. If so, remove these triangles.
