@@ -1,6 +1,6 @@
 ## User manual
 
-1. Clone the repository and navigate to the root
+1. Clone the repository
 ```
 ~/ $ git clone https://github.com/valttteri/Tiralabra.git
 ~/ $ cd Tiralabra 
@@ -9,9 +9,10 @@
 ```
 ~/Tiralabra/ $ pip install -r requirements.txt
 ```
-3. Run the program
+3. Navigate to the root and run the program
 ```
-~/Tiralabra/ $ python app.py
+~/Tiralabra/ $ cd src
+~/src/ $ python app.py
 ```
 The program will ask you to enter values for height, width and room count. There are limits displayed and if an invalid input is entered, the program asks for a new one.
 Once a valid input is entered, a pygame window opens and the dungeon generation begins. Controls:
@@ -22,10 +23,10 @@ Once a valid input is entered, a pygame window opens and the dungeon generation 
 Remember to click the pygame window or pressing a key won't register. The controls above should also be printed to console. If they are not, you can
 force this by either setting ```PYTHONUNBUFFERED``` environment variable to equal true
 ```
-~/Tiralabra/ $ export PYTHONUNBUFFERED=true
-~/Tiralabra/ $ python app.py
+~/src/ $ export PYTHONUNBUFFERED=true
+~/src/ $ python app.py
 ```
 or run the program as follows
 ```
-~/Tiralabra/ $ python -u app.py
+~/src/ $ python -u app.py
 ```
