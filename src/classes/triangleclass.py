@@ -67,5 +67,5 @@ class Triangle:
 
     def circum_circle(self):
         pygame.draw.circle(
-            self.display, RED, self.circumcenter, radius=self.circum_circles_radius, width=2
+            self.display, BLUE, self.circumcenter, radius=self.circum_circles_radius, width=2
         )

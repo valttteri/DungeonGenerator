@@ -104,7 +104,7 @@ def dungeon_generator(node_count: int, display_width: int, display_height):
 
     #Start by plotting the coordinates
     for node in coordinates:
-        pygame.draw.circle(display, BLUE, node, 4)
+        pygame.draw.circle(display, RED, node, 4)
 
     pygame.display.flip()
     pygame.time.wait(1000)
@@ -120,7 +120,7 @@ def dungeon_generator(node_count: int, display_width: int, display_height):
 
     #Plot the minimum spanning tree
     for node in coordinates:
-        pygame.draw.circle(display, BLUE, node, 4)
+        pygame.draw.circle(display, RED, node, 4)
     plotting.plot_mst(minimum_spanning_tree, display, GREEN)
 
     pygame.display.flip()
