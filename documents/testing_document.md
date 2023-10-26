@@ -13,7 +13,7 @@ These tests actually take the ``tools.py`` tests further as the algorithms use f
 
 #### Instructions for running the tests
 
-1. Clone the repository and navigate to the root
+1. Clone the repository
 ```
 ~/ $ git clone https://github.com/valttteri/Tiralabra.git
 ~/ $ cd Tiralabra 
@@ -23,15 +23,16 @@ These tests actually take the ``tools.py`` tests further as the algorithms use f
 ~/Tiralabra/ $ pip install -r requirements.txt
 ```
 
-3. Run the tests
+3. Navigate to the root and run the tests
 ```
-~/Tiralabra/ $ python -m coverage run -m unittest discover tests
+~/Tiralabra/ $ cd src
+~/src/ $ python -m coverage run -m unittest discover tests
 ```
 ![title](images/vscode5.png)
 
 Create a report. If the test files are included you can try ``--omit tests\\*``
 ```
-~/Tiralabra/ $ python -m coverage report --omit tests\*
+~/src/ $ python -m coverage report --omit tests\*
 ```
 
 ![title](images/vscode7.png)
